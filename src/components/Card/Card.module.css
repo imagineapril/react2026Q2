@@ -1,24 +1,31 @@
 .card {
+  background: linear-gradient(135deg, rgba(30, 25, 45, 0.8), rgba(20, 15, 35, 0.6));
+  backdrop-filter: blur(10px);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  padding: var(--spacing-md);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
   margin-bottom: var(--spacing-md);
-  background-color: var(--color-bg-card);
-  transition: box-shadow var(--transition-fast);
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-sm);
+  transition: all var(--transition-normal);
+  position: relative;
+  overflow: hidden;
 }
 
 .card:hover {
-  box-shadow: var(--shadow-md);
+  transform: translateY(-4px);
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-glow);
+  background: linear-gradient(135deg, rgba(40, 35, 60, 0.85), rgba(25, 20, 45, 0.7));
 }
 
 .name {
-  margin: 0;
+  margin: 0 0 var(--spacing-sm) 0;
   font-size: var(--font-size-xl);
   font-weight: 600;
-  color: var(--color-text-primary);
+  background: linear-gradient(135deg, var(--color-text-primary), var(--color-primary));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  display: inline-block;
 }
 
 .description {

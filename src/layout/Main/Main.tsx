@@ -1,4 +1,5 @@
 import { Component} from 'react';
+import styles from './Main.module.css';
 
 interface MainProps {
   children: React.ReactNode;
@@ -7,7 +8,7 @@ interface MainProps {
 class Main extends Component<MainProps> {
   render() {
     return (
-      <main>
+      <main className={styles.main}>
         {this.props.children}
       </main>
     );

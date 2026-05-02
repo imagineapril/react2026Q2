@@ -10,12 +10,8 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #f5f5f5;
-  color: #333;
-}
-
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
+  
+  background: radial-gradient(ellipse at 30% 40%, #0F0F1A 0%, #050508 100%);
+  color: var(--color-text-primary);
+  min-height: 100vh;
 }
