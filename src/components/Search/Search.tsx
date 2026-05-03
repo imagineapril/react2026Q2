@@ -15,6 +15,13 @@ class Search extends Component<SearchProps, SearchState> {
     this.setState({ inputValue: event.target.value });
   };
 
+  handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      this.handleSearch();
+    }
+  };
+
   handleSearch = () => {
     const trimmedValue = this.state.inputValue.trim();
     console.log('Search clicked:', trimmedValue);
@@ -29,6 +36,7 @@ class Search extends Component<SearchProps, SearchState> {
           className={styles.input}
           value={this.state.inputValue}
           onChange={this.handleInputChange}
+          onKeyDown={this.handleKeyDown}
           placeholder="Enter search term..."
         />
         <Button onClick={this.handleSearch}>Search</Button>

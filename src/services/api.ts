@@ -1,27 +1,71 @@
-import type { Item } from '../types';
+import type { Item, PokemonListResponse, PokemonDetail } from '../types';
 
-const MOCK_ITEMS: Item[] = [
-  { id: 1, name: 'React Basics', description: 'Learn the fundamentals of React' },
-  { id: 2, name: 'Class Components', description: 'Deep dive into class components' },
-  { id: 3, name: 'Error Boundaries', description: 'Handle errors gracefully in React' },
-  { id: 4, name: 'API Integration', description: 'Connect your app to REST APIs' },
-  { id: 5, name: 'CSS Modules', description: 'Scoped styling in React' },
-];
+const BASE_URL = 'https://pokeapi.co/api/v2';
+
+let allPokemonCache: Item[] | null = null;
+
+const fetchPokemonDetails = async (url: string): Promise<Item> => {
+  const response = await fetch(url);
+  const data: PokemonDetail = await response.json();
+  
+  return {
+    id: data.id,
+    name: data.name.charAt(0).toUpperCase() + data.name.slice(1),
+    description: getPokemonDescription(data),
+    image: data.sprites.other?.['official-artwork']?.front_default || data.sprites.front_default,
+    height: data.height,
+    weight: data.weight,
+    types: data.types.map(t => t.type.name),
+  };
+};
+
+const getPokemonDescription = (data: PokemonDetail): string => {
+  const heightM = (data.height / 10).toFixed(1);
+  const weightKg = (data.weight / 10).toFixed(1);
+  const types = data.types.map(t => t.type.name).join('/');
+  
+  return `Height: ${heightM}m | Weight: ${weightKg}kg | Type: ${types}`;
+};
 
 export const apiService = {
   getAllItems: async (): Promise<Item[]> => {
-    // TODO: API request for getting all items
+    try {
+      if (allPokemonCache) {
+        return allPokemonCache;
+      }
 
-    console.log('Getting all items (mock data)');
-    return [...MOCK_ITEMS];
+      const response = await fetch(`${BASE_URL}/pokemon?limit=20&offset=0`);
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const data: PokemonListResponse = await response.json();
+      
+      const items: Item[] = await Promise.all(
+        data.results.map(async (pokemon) => {
+          return await fetchPokemonDetails(pokemon.url);
+        })
+      );
+      
+      allPokemonCache = items;
+      
+      return items;
+    } catch (error) {
+      console.error('Failed to fetch data:', error);
+      return [];
+    }
   },
 
   searchItems: async (searchTerm: string): Promise<Item[]> => {
-    // TODO: API request for getting searched items
 
-    console.log(`Searching for "${searchTerm}" (mock data)`);
+    if (!searchTerm.trim()) {
+      return apiService.getAllItems();
+    }
 
-    const filtered = MOCK_ITEMS.filter(item =>
+    const allItems = await apiService.getAllItems();
+
+    const filtered = allItems.filter(item =>
       item.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
 

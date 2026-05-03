@@ -4,18 +4,88 @@
   margin-bottom: var(--spacing-lg);
 }
 
-.title {
-  font-size: 48px;
-  background: linear-gradient(135deg, #FFD700, #FFA500);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+.titleWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-md);
   margin-bottom: var(--spacing-sm);
-  letter-spacing: -0.5px;
 }
 
-.subtitle {
-  color: var(--color-text-secondary);
-  font-size: var(--font-size-lg);
-  opacity: 0.9;
+.pokeballIcon {
+  width: 60px;
+  height: 60px;
+  position: relative;
+  flex-shrink: 0;
+  background: #EE3030;
+  border-radius: 50%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+}
+
+.pokeballIcon::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  background: #EE3030;
+  z-index: 1;
+}
+
+.pokeballIcon::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  background: white;
+  z-index: 1;
+}
+
+.pokeballIcon .blackBand {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 8px;
+  background: #222224;
+  transform: translateY(-50%);
+  z-index: 2;
+}
+
+/* Кнопка посередине (белый круг с черным ободком) */
+.pokeballIcon .button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 18px;
+  height: 18px;
+  background: white;
+  border-radius: 50%;
+  border: 2px solid #222224;
+  z-index: 3;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Кнопка при наведении (эффект свечения) */
+.pokeballIcon:hover .button {
+  background: #FFCB05;
+}
+
+.title {
+  font-size: 48px;
+  font-weight: 700;
+  color: var(--color-primary);
+  letter-spacing: -0.5px;
+  margin: 0;
+  text-shadow:
+    2px 2px 0 var(--color-bg-card),
+    -2px -2px 0 var(--color-bg-card),
+    2px -2px 0 var(--color-bg-card),
+    -2px 2px 0 var(--color-bg-card);
 }

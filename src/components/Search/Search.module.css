@@ -1,8 +1,4 @@
 .wrapper {
-  background: rgba(15, 15, 25, 0.6);
-  backdrop-filter: blur(8px);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-xl);
   padding: var(--spacing-md);
   margin-bottom: var(--spacing-2xl);
   display: flex;
@@ -10,29 +6,24 @@
   transition: all var(--transition-fast);
 }
 
-.wrapper:focus-within {
-  border-color: var(--color-primary);
-  box-shadow: var(--shadow-glow);
-}
-
 .input {
   flex: 1;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.3);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   padding: var(--spacing-md) var(--spacing-lg);
   font-size: var(--font-size-md);
-  color: var(--color-text-primary);
+  color: var(--color-bg-card);
   transition: all var(--transition-fast);
 }
 
 .input:focus {
   outline: none;
   border-color: var(--color-primary);
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.4);
 }
 
 .input::placeholder {
-  color: var(--color-text-secondary);
+  color: var(--color-primary);
   opacity: 0.6;
 }
