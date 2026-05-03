@@ -27,3 +27,28 @@
   color: var(--color-primary);
   opacity: 0.6;
 }
+
+@media (max-width: 768px) {
+  .wrapper {
+    padding: var(--spacing-sm);
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-xl);
+  }
+  
+  .input {
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: var(--font-size-sm);
+  }
+}
+
+@media (max-width: 320px) {
+  .wrapper {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+  
+  .input {
+    padding: var(--spacing-sm);
+    font-size: var(--font-size-sm);
+  }
+}

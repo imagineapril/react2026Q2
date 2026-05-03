@@ -18,3 +18,35 @@
   border-radius: var(--radius-lg);
   border: 1px dashed var(--color-border);
 }
+
+@media (max-width: 768px) {
+  .container {
+    margin-top: var(--spacing-lg);
+  }
+  
+  .title {
+    font-size: var(--font-size-lg);
+    margin-bottom: var(--spacing-md);
+  }
+  
+  .noResults {
+    padding: var(--spacing-lg);
+    font-size: var(--font-size-sm);
+  }
+}
+
+@media (max-width: 320px) {
+  .container {
+    margin-top: var(--spacing-md);
+  }
+  
+  .title {
+    font-size: var(--font-size-md);
+    margin-bottom: var(--spacing-sm);
+  }
+  
+  .noResults {
+    padding: var(--spacing-md);
+    font-size: var(--font-size-xs);
+  }
+}

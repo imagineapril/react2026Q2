@@ -57,7 +57,6 @@
   z-index: 2;
 }
 
-/* Кнопка посередине (белый круг с черным ободком) */
 .pokeballIcon .button {
   position: absolute;
   top: 50%;
@@ -72,7 +71,6 @@
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
-/* Кнопка при наведении (эффект свечения) */
 .pokeballIcon:hover .button {
   background: #FFCB05;
 }
@@ -88,4 +86,45 @@
     -2px -2px 0 var(--color-bg-card),
     2px -2px 0 var(--color-bg-card),
     -2px 2px 0 var(--color-bg-card);
+}
+
+@media (max-width: 768px) {
+  .header {
+    padding: var(--spacing-lg) var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+  }
+  
+  .titleWrapper {
+    gap: var(--spacing-sm);
+  }
+  
+  .pokeballIcon {
+    width: 48px;
+    height: 48px;
+  }
+  
+  .title {
+    font-size: 32px;
+  }
+}
+
+@media (max-width: 320px) {
+  .header {
+    padding: var(--spacing-md) var(--spacing-sm);
+    margin-bottom: var(--spacing-sm);
+  }
+  
+  .titleWrapper {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+  
+  .pokeballIcon {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .title {
+    font-size: 24px;
+  }
 }

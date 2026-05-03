@@ -19,3 +19,18 @@
 .button:active {
   transform: translateY(0);
 }
+
+@media (max-width: 768px) {
+  .button {
+    padding: var(--spacing-sm) var(--spacing-lg);
+    font-size: var(--font-size-sm);
+  }
+}
+
+@media (max-width: 320px) {
+  .button {
+    padding: var(--spacing-xs) var(--spacing-md);
+    font-size: var(--font-size-xs);
+    white-space: normal;
+  }
+}
