@@ -1,3 +1,5 @@
+import type { ReactNode } from "react";
+
 export interface Item {
   id: number;
   name: string;
@@ -69,4 +71,21 @@ export interface CardProps {
   height?: number;
   weight?: number;
   types?: string[];
+}
+
+export interface ErrorBoundaryProps {
+  children: ReactNode;
+}
+
+export interface ErrorBoundaryState {
+  hasError: boolean;
+  errorMessage: string;
+}
+
+export interface ErrorTestButtonProps {
+  onError?: () => void;
+}
+
+export interface ErrorTestButtonState {
+  shouldThrow: boolean;
 }

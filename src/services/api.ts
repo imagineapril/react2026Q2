@@ -37,7 +37,13 @@ export const apiService = {
       const response = await fetch(`${BASE_URL}/pokemon?limit=151&offset=0`);
       
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        if (response.status === 404) {
+          throw new Error('API endpoint not found. Please try again later.');
+        } else if (response.status === 429) {
+          throw new Error('Too many requests. Please wait a moment and try again.');
+        } else {
+          throw new Error(`Server error: ${response.status}. Please try again later.`);
+        }
       }
       
       const data: PokemonListResponse = await response.json();
@@ -53,7 +59,10 @@ export const apiService = {
       return items;
     } catch (error) {
       console.error('Failed to fetch data:', error);
-      return [];
+      if (error instanceof Error) {
+        throw new Error(`Network error: ${error.message}`);
+      }
+      throw new Error('Failed to load Pokémon. Please check your internet connection.');
     }
   },
 

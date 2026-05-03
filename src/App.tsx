@@ -4,6 +4,7 @@ import Main from './layout/Main/Main';
 import Search from './components/Search/Search';
 import Results from './components/Results/Results';
 import Loader from './components/Loader/Loader';
+import ErrorTestButton from './components/Button/ErrorTestButton';
 import { apiService } from './services/api';
 import type { AppState, Item } from './types';
 
@@ -69,12 +70,13 @@ class App extends Component<Record<string, never>, AppState> {
           {loading && <Loader />}
 
           {error && (
-            <div >
+            <div className="error-message">
               {error}
             </div>
           )}
 
           {!loading && !error && <Results items={items} />}
+          <ErrorTestButton />
         </Main>
       </div>
     );

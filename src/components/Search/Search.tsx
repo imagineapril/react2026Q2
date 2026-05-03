@@ -28,7 +28,6 @@ class Search extends Component<SearchProps, SearchState> {
 
   handleSearch = () => {
     const trimmedValue = this.state.inputValue.trim();
-    this.props.onSearch(trimmedValue);
 
     if (trimmedValue) {
       localStorage.setItem('pokemonSearchTerm', trimmedValue);
