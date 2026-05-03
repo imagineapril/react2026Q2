@@ -3,6 +3,7 @@ import Header from './layout/Header/Header';
 import Main from './layout/Main/Main';
 import Search from './components/Search/Search';
 import Results from './components/Results/Results';
+import Loader from './components/Loader/Loader';
 import { apiService } from './services/api';
 import type { AppState, Item } from './types';
 
@@ -65,11 +66,7 @@ class App extends Component<Record<string, never>, AppState> {
         <Main>
           <Search onSearch={this.handleSearch} initialSearchTerm={searchTerm} />
 
-          {loading && (
-            <div >
-              Loading...
-            </div>
-          )}
+          {loading && <Loader />}
 
           {error && (
             <div >
