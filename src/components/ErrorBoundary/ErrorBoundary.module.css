@@ -1,0 +1,25 @@
+.errorContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  padding: var(--spacing-xl);
+  text-align: center;
+  background: linear-gradient(135deg, var(--color-bg-card), #285a9a);
+  border-radius: var(--radius-lg);
+  margin: var(--spacing-lg);
+}
+
+.errorTitle {
+  font-size: var(--font-size-2xl);
+  color: var(--color-danger);
+  margin-bottom: var(--spacing-md);
+}
+
+.errorMessage {
+  font-size: var(--font-size-md);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-xl);
+  max-width: 500px;
+}
