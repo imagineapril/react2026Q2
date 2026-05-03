@@ -6,8 +6,12 @@ import styles from './Search.module.css';
 class Search extends Component<SearchProps, SearchState> {
   constructor(props: SearchProps) {
     super(props);
+
+    const savedSearchTerm = localStorage.getItem('pokemonSearchTerm');
+    const initialValue = savedSearchTerm || props.initialSearchTerm || '';
+
     this.state = {
-      inputValue: props.initialSearchTerm || ''
+      inputValue: initialValue
     };
   }
 
@@ -24,7 +28,14 @@ class Search extends Component<SearchProps, SearchState> {
 
   handleSearch = () => {
     const trimmedValue = this.state.inputValue.trim();
-    console.log('Search clicked:', trimmedValue);
+    this.props.onSearch(trimmedValue);
+
+    if (trimmedValue) {
+      localStorage.setItem('pokemonSearchTerm', trimmedValue);
+    } else {
+      localStorage.removeItem('pokemonSearchTerm');
+    }
+    
     this.props.onSearch(trimmedValue);
   };
 
@@ -37,7 +48,7 @@ class Search extends Component<SearchProps, SearchState> {
           value={this.state.inputValue}
           onChange={this.handleInputChange}
           onKeyDown={this.handleKeyDown}
-          placeholder="Enter search term..."
+          placeholder="Enter pokemon name"
         />
         <Button onClick={this.handleSearch}>Search</Button>
       </div>

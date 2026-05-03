@@ -34,7 +34,7 @@ export const apiService = {
         return allPokemonCache;
       }
 
-      const response = await fetch(`${BASE_URL}/pokemon?limit=20&offset=0`);
+      const response = await fetch(`${BASE_URL}/pokemon?limit=151&offset=0`);
       
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);

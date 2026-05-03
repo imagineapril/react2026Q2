@@ -18,7 +18,6 @@ class App extends Component<Record<string, never>, AppState> {
   }
 
   componentDidMount() {
-    console.log('App mounted, loading initial data...');
     this.loadData();
   }
 
@@ -37,7 +36,6 @@ class App extends Component<Record<string, never>, AppState> {
       }
       
       this.setState({ items, loading: false });
-      console.log(`Loaded ${items.length} items`);
     } catch (error) {
       console.error('Failed to load data:', error);
       this.setState({
@@ -48,8 +46,11 @@ class App extends Component<Record<string, never>, AppState> {
   };
 
   handleSearch = (term: string) => {
-    console.log(`Search requested: "${term}"`);
-    
+
+    if (term === this.state.searchTerm) {
+      return;
+    }
+
     this.setState({ searchTerm: term }, () => {
       this.loadData();
     });
