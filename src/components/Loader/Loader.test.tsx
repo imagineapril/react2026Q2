@@ -11,7 +11,6 @@ describe('Loader Component', () => {
 
   it('renders pokeball loader with correct CSS class', () => {
     const { container } = render(<Loader />);
-    // Используем импортированный styles для проверки класса
     const pokeballDiv = container.querySelector(`.${styles.pokeballLoader}`);
     expect(pokeballDiv).toBeInTheDocument();
   });
