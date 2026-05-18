@@ -1,58 +1,52 @@
-import { Component } from 'react';
-import type { SearchProps, SearchState } from '../../types';
+import { useState } from 'react';
+import { useLocalStorage } from '../../hooks/useLocalStorage';
+import type { SearchProps } from '../../types';
 import Button from '../Button/Button';
 import styles from './Search.module.css';
 
-class Search extends Component<SearchProps, SearchState> {
-  constructor(props: SearchProps) {
-    super(props);
+const Search = ({onSearch, initialSearchTerm = ''}: SearchProps) => {
 
-    const savedSearchTerm = localStorage.getItem('pokemonSearchTerm');
-    const initialValue = savedSearchTerm || props.initialSearchTerm || '';
+  const [savedTerm, setSavedTerm] = useLocalStorage('pokemonSearchTerm', '');
+  const [inputValue, setInputValue] = useState(
+    savedTerm || initialSearchTerm
+  );
 
-    this.state = {
-      inputValue: initialValue
-    };
-  }
-
-  handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({ inputValue: event.target.value });
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(event.target.value);
   };
 
-  handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
       event.preventDefault();
-      this.handleSearch();
+      handleSearch();
     }
   };
 
-  handleSearch = () => {
-    const trimmedValue = this.state.inputValue.trim();
+  const handleSearch = () => {
+    const trimmedValue = inputValue.trim();
 
     if (trimmedValue) {
-      localStorage.setItem('pokemonSearchTerm', trimmedValue);
+      setSavedTerm(trimmedValue)
     } else {
-      localStorage.removeItem('pokemonSearchTerm');
+      setSavedTerm('')
     }
-    
-    this.props.onSearch(trimmedValue);
+
+    onSearch(trimmedValue);
   };
 
-  render() {
-    return (
-      <div className={styles.wrapper}>
-        <input
-          type="text"
-          className={styles.input}
-          value={this.state.inputValue}
-          onChange={this.handleInputChange}
-          onKeyDown={this.handleKeyDown}
-          placeholder="Enter pokemon name"
-        />
-        <Button onClick={this.handleSearch}>Search</Button>
-      </div>
-    );
-  }
+  return (
+    <div className={styles.wrapper}>
+      <input
+        type="text"
+        className={styles.input}
+        value={inputValue}
+        onChange={handleInputChange}
+        onKeyDown={handleKeyDown}
+        placeholder="Enter pokemon name"
+      />
+      <Button onClick={handleSearch}>Search</Button>
+    </div>
+  );
 }
 
 export default Search;

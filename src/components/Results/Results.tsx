@@ -1,12 +1,9 @@
-import { Component } from 'react';
 import Card from '../Card/Card';
 import { type ResultsProps } from '../../types';
 import styles from './Results.module.css';
 
-class Results extends Component<ResultsProps> {
-  render() {
-    const { items = [] } = this.props;
-    
+const Results = ({ items = [] }: ResultsProps) => {
+
     return (
       <div className={styles.container}>
         <h2 className={styles.title}>Results ({items.length})</h2>
@@ -15,10 +12,10 @@ class Results extends Component<ResultsProps> {
         ) : (
           <div className={styles.cardsList}>
             {items.map(item => (
-              <Card 
-                key={item.id} 
-                name={item.name} 
-                description={item.description} 
+              <Card
+                key={item.id}
+                name={item.name}
+                description={item.description}
                 image={item.image}
                 height={item.height}
                 weight={item.weight}
@@ -29,7 +26,6 @@ class Results extends Component<ResultsProps> {
         )}
       </div>
     );
-  }
 }
 
 export default Results;

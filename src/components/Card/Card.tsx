@@ -1,12 +1,7 @@
-import { Component } from 'react';
 import type { CardProps } from '../../types';
 import styles from './Card.module.css';
 
-class Card extends Component<CardProps> {
-  render() {
-    const { name, description, image, types } = this.props;
-
-    const getTypeColor = (type: string): string => {
+const getTypeColor = (type: string): string => {
       const colors: Record<string, string> = {
         grass: '#78c850',
         fire: '#f08030',
@@ -30,9 +25,10 @@ class Card extends Component<CardProps> {
       return colors[type] || '#ffffff';
     };
 
+const Card = ({ name, description, image, types }:CardProps) => {
     const mainType = types && types.length > 0 ? types[0] : 'normal';
     const nameColor = getTypeColor(mainType);
-    
+
     return (
       <div className={styles.card}>
         {image && (
@@ -55,7 +51,6 @@ class Card extends Component<CardProps> {
         </div>
       </div>
     );
-  }
 }
 
 export default Card;

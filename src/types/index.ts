@@ -56,10 +56,6 @@ export interface SearchProps {
   initialSearchTerm?: string;
 }
 
-export interface SearchState {
-  inputValue: string;
-}
-
 export interface ResultsProps {
   items: Item[];
 }
