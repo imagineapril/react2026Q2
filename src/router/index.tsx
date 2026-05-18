@@ -3,6 +3,7 @@ import RootLayout from '../layout/RootLayout/RootLayout';
 import HomePage from '../pages/HomePage/HomePage';
 import AboutPage from '../pages/AboutPage/AboutPage';
 import NotFoundPage from '../pages/NotFoundPage/NotFoundPage';
+import PokemonDetailPage from '../pages/PokemonDetailPage/PokemonDetailPage';
 
 export const router = createBrowserRouter([
   {
@@ -10,7 +11,13 @@ export const router = createBrowserRouter([
     element: <RootLayout />,
     errorElement: <NotFoundPage />,
     children: [
-      { index: true, element: <HomePage /> },
+      {
+        path: '/',
+        element: <HomePage />,
+        children: [
+          { path: 'pokemon/:id', element: <PokemonDetailPage /> },
+        ],
+      },
       { path: 'about', element: <AboutPage /> },
       { path: '*', element: <NotFoundPage /> },
     ],

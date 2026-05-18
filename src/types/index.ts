@@ -58,6 +58,7 @@ export interface SearchProps {
 
 export interface ResultsProps {
   items: Item[];
+  currentPage?: number;
 }
 
 export interface CardProps {

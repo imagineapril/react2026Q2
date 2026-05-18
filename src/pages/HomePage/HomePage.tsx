@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, Outlet } from 'react-router-dom';
 import Main from '../../layout/Main/Main';
 import Search from '../../components/Search/Search';
 import Results from '../../components/Results/Results';
@@ -7,6 +7,7 @@ import Loader from '../../components/Loader/Loader';
 import Pagination from '../../components/Pagination/Pagination';
 import { apiService } from '../../services/api';
 import type { Item } from '../../types';
+import styles from './HomePage.module.css';
 
 const ITEMS_PER_PAGE = 20;
 
@@ -44,7 +45,7 @@ const HomePage = () => {
   if (searchTerm !== '') {
     setSearchParams({ page: '1' });
   }
-}, [searchTerm, setSearchParams]);
+  }, [searchTerm, setSearchParams]);
 
   const handleSearch = (term: string) => {
     if (term === searchTerm) return;
@@ -68,17 +69,23 @@ const HomePage = () => {
       {error && <div className="error-message">{error}</div>}
 
       {!loading && !error && (
-      <>
-        <Results items={paginatedItems} />
-        {totalPages > 1 && (
-          <Pagination
-            currentPage={validPage}
-            totalPages={totalPages}
-            onPageChange={handlePageChange}
-          />
-        )}
-      </>
-    )}
+        <div className={styles.splitLayout}>
+          <div className={styles.leftPanel}>
+            <Results items={paginatedItems} currentPage={validPage} />
+            {totalPages > 1 && (
+              <Pagination
+                currentPage={validPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+              />
+            )}
+          </div>
+
+          <div className={styles.rightPanel}>
+            <Outlet />
+          </div>
+        </div>
+      )}
     </Main>
   );
 };
