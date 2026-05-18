@@ -1,8 +1,13 @@
 import { render, screen } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
 import { describe, it, expect } from 'vitest';
 import Results from './Results';
 import styles from './Results.module.css';
 import type { Item } from '../../types';
+
+const renderWithRouter = (ui: React.ReactElement) => {
+  return render(<MemoryRouter>{ui}</MemoryRouter>);
+};
 
 describe('Results Component', () => {
   const mockItems: Item[] = [
@@ -27,18 +32,18 @@ describe('Results Component', () => {
   ];
 
   it('renders results count', () => {
-    render(<Results items={mockItems} />);
+    renderWithRouter(<Results items={mockItems} />);
     expect(screen.getByText('Results (2)')).toBeInTheDocument();
   });
 
   it('renders correct number of items', () => {
-    render(<Results items={mockItems} />);
+    renderWithRouter(<Results items={mockItems} />);
     expect(screen.getByText('Bulbasaur')).toBeInTheDocument();
     expect(screen.getByText('Charmander')).toBeInTheDocument();
   });
 
   it('displays no results message when items array is empty', () => {
-    render(<Results items={[]} />);
+    renderWithRouter(<Results items={[]} />);
     expect(screen.getByText(/No items found/i)).toBeInTheDocument();
     expect(screen.getByText('Results (0)')).toBeInTheDocument();
   });
@@ -51,19 +56,19 @@ describe('Results Component', () => {
         description: 'Minimal description',
       },
     ];
-    render(<Results items={minimalItems} />);
+    renderWithRouter(<Results items={minimalItems} />);
     expect(screen.getByText('Minimal Pokemon')).toBeInTheDocument();
     expect(screen.getByText('Minimal description')).toBeInTheDocument();
   });
 
   it('does not render cards list when items are empty', () => {
-    const { container } = render(<Results items={[]} />);
+    const { container } = renderWithRouter(<Results items={[]} />);
     const cardsList = container.querySelector('.cardsList');
     expect(cardsList).toBeNull();
   });
 
   it('renders cards list when items exist', () => {
-    const { container } = render(<Results items={mockItems} />);
+    const { container } = renderWithRouter(<Results items={mockItems} />);
     const cardsList = container.querySelector(`.${styles.cardsList}`);
     expect(cardsList).toBeInTheDocument();
   });

@@ -15,7 +15,7 @@ describe('Search Component', () => {
   });
 
   it('displays saved search term from localStorage on mount', () => {
-    localStorage.setItem('pokemonSearchTerm', 'pikachu');
+    localStorage.setItem('pokemonSearchTerm', '"pikachu"');
     render(<Search onSearch={() => {}} />);
     const input = screen.getByPlaceholderText('Enter pokemon name');
     expect(input).toHaveValue('pikachu');
@@ -40,7 +40,7 @@ describe('Search Component', () => {
     const input = screen.getByPlaceholderText('Enter pokemon name');
     fireEvent.change(input, { target: { value: '  bulbasaur  ' } });
     fireEvent.click(screen.getByRole('button', { name: 'Search' }));
-    expect(localStorage.getItem('pokemonSearchTerm')).toBe('bulbasaur');
+    expect(localStorage.getItem('pokemonSearchTerm')).toBe('"bulbasaur"');
     expect(onSearch).toHaveBeenCalledWith('bulbasaur');
   });
 
@@ -50,7 +50,7 @@ describe('Search Component', () => {
     const input = screen.getByPlaceholderText('Enter pokemon name');
     fireEvent.change(input, { target: { value: 'squirtle' } });
     fireEvent.keyDown(input, { key: 'Enter', code: 'Enter' });
-    expect(localStorage.getItem('pokemonSearchTerm')).toBe('squirtle');
+    expect(localStorage.getItem('pokemonSearchTerm')).toBe('"squirtle"');
     expect(onSearch).toHaveBeenCalledWith('squirtle');
   });
 
@@ -60,7 +60,7 @@ describe('Search Component', () => {
     const input = screen.getByPlaceholderText('Enter pokemon name');
     fireEvent.change(input, { target: { value: '   ' } });
     fireEvent.click(screen.getByRole('button', { name: 'Search' }));
-    expect(localStorage.getItem('pokemonSearchTerm')).toBeNull();
+    expect(localStorage.getItem('pokemonSearchTerm')).toBe('""');
     expect(onSearch).toHaveBeenCalledWith('');
   });
 
@@ -68,18 +68,18 @@ describe('Search Component', () => {
     const onSearch = vi.fn();
     render(<Search onSearch={onSearch} />);
     fireEvent.click(screen.getByRole('button', { name: 'Search' }));
-    expect(localStorage.getItem('pokemonSearchTerm')).toBeNull();
+    expect(localStorage.getItem('pokemonSearchTerm')).toBe('""');
     expect(onSearch).toHaveBeenCalledWith('');
   });
 
   it('overwrites existing localStorage value when new search is performed', () => {
-    localStorage.setItem('pokemonSearchTerm', 'old');
+    localStorage.setItem('pokemonSearchTerm', '"old"');
     const onSearch = vi.fn();
     render(<Search onSearch={onSearch} />);
     const input = screen.getByPlaceholderText('Enter pokemon name');
     fireEvent.change(input, { target: { value: 'new' } });
     fireEvent.click(screen.getByRole('button', { name: 'Search' }));
-    expect(localStorage.getItem('pokemonSearchTerm')).toBe('new');
+    expect(localStorage.getItem('pokemonSearchTerm')).toBe('"new"');
     expect(onSearch).toHaveBeenCalledWith('new');
   });
 });
