@@ -1,0 +1,34 @@
+.container {
+  text-align: center;
+  padding: var(--spacing-xl);
+  color: var(--color-text-primary);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.title {
+  font-size: var(--font-size-2xl);
+  margin-bottom: var(--spacing-lg);
+}
+
+.description {
+  font-size: var(--font-size-md);
+  margin-bottom: var(--spacing-md);
+  line-height: 1.6;
+}
+
+.author {
+  font-size: var(--font-size-md);
+  margin-bottom: var(--spacing-md);
+}
+
+.courseLink {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: all var(--transition-fast);
+}
+
+.courseLink:hover {
+  text-decoration: underline;
+  opacity: 0.8;
+}
