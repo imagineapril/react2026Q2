@@ -4,12 +4,23 @@ import PokemonDetailPage from './PokemonDetailPage';
 import { apiService } from '../../services/api';
 
 vi.mock('../../services/api', () => ({
+  getItemById: vi.fn(),
   apiService: { getAllItems: vi.fn() },
 }));
 
 describe('PokemonDetailPage', () => {
   it('shows loader then details', async () => {
-    vi.mocked(apiService.getAllItems).mockResolvedValue([{ id: 25, name: 'Pikachu', description: 'Electric' }]);
+    const mockPokemon = {
+      id: 25,
+      name: 'Pikachu',
+      description: 'Electric mouse',
+      image: 'pikachu.png',
+      height: 4,
+      weight: 60,
+      types: ['Electric'],
+    };
+    vi.mocked(apiService.getItemById).mockResolvedValue(mockPokemon);
+
     render(
       <MemoryRouter initialEntries={['/pokemon/25']}>
         <Routes>
@@ -24,7 +35,7 @@ describe('PokemonDetailPage', () => {
   });
 
   it('shows error if pokemon not found', async () => {
-    vi.mocked(apiService.getAllItems).mockResolvedValue([]);
+    vi.mocked(apiService.getItemById).mockResolvedValue(null);
     render(
       <MemoryRouter initialEntries={['/pokemon/999']}>
         <Routes>
