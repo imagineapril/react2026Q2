@@ -4,8 +4,9 @@ import PokemonDetailPage from './PokemonDetailPage';
 import { apiService } from '../../services/api';
 
 vi.mock('../../services/api', () => ({
-  getItemById: vi.fn(),
-  apiService: { getAllItems: vi.fn() },
+  apiService: {
+    getItemById: vi.fn(),
+  },
 }));
 
 describe('PokemonDetailPage', () => {
@@ -28,7 +29,9 @@ describe('PokemonDetailPage', () => {
         </Routes>
       </MemoryRouter>
     );
+
     expect(screen.getByText(/Loading details/i)).toBeInTheDocument();
+
     await waitFor(() => {
       expect(screen.getByText('Pikachu')).toBeInTheDocument();
     });
@@ -36,6 +39,7 @@ describe('PokemonDetailPage', () => {
 
   it('shows error if pokemon not found', async () => {
     vi.mocked(apiService.getItemById).mockResolvedValue(null);
+
     render(
       <MemoryRouter initialEntries={['/pokemon/999']}>
         <Routes>
@@ -43,6 +47,7 @@ describe('PokemonDetailPage', () => {
         </Routes>
       </MemoryRouter>
     );
+
     await waitFor(() => {
       expect(screen.getByText(/not found/i)).toBeInTheDocument();
     });
