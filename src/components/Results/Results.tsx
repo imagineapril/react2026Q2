@@ -18,7 +18,6 @@ const Results = ({ items = [], currentPage = 1 }: ResultsProps) => {
                 style={{ textDecoration: 'none' }}
               >
                 <Card
-                  key={item.id}
                   name={item.name}
                   description={item.description}
                   image={item.image}

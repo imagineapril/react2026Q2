@@ -15,17 +15,19 @@ const PokemonDetailPage = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    let isMounted = true;
     const loadPokemon = async () => {
       if (!id) return;
       setLoading(true);
       setError(null);
       try {
-        const all = await apiService.getAllItems();
-        const found = all.find(p => p.id === parseInt(id, 10));
-        if (found) {
-          setPokemon(found);
-        } else {
-          setError('Pokemon not found');
+        const found = await apiService.getItemById(parseInt(id, 10));
+        if (isMounted) {
+          if (found) {
+            setPokemon(found);
+          } else {
+            setError('Pokemon not found');
+          }
         }
       } catch (err) {
         console.error(err);
@@ -35,6 +37,9 @@ const PokemonDetailPage = () => {
       }
     };
     loadPokemon();
+    return () => {
+      isMounted = false;
+    }
   }, [id]);
 
   const handleClose = () => {
