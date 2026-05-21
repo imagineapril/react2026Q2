@@ -8,10 +8,16 @@ export const apiService = {
     if (allPokemonCache) {
       return allPokemonCache;
     }
-    console.log('🔄 Загружаем моковые данные...');
+
     await new Promise(resolve => setTimeout(resolve, 800));
     allPokemonCache = mockPokemonList;
     return allPokemonCache;
+  },
+
+  getItemById: async (id: number): Promise<Item | null> => {
+    const all = await apiService.getAllItems();
+    const found = all.find(item => item.id === id);
+    return found || null;
   },
 
   searchItems: async (searchTerm: string): Promise<Item[]> => {
