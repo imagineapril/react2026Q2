@@ -1,22 +1,39 @@
-import { Outlet } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Outlet, useSearchParams } from 'react-router-dom';
 import Main from '../../layout/Main/Main';
 import Search from '../../components/Search/Search';
 import Results from '../../components/Results/Results';
 import Loader from '../../components/Loader/Loader';
 import Pagination from '../../components/Pagination/Pagination';
-import { useHomePage } from '../../hooks/useHomePage';
+import { usePokemonStore } from '../../store/pokemonStore';
 import styles from './HomePage.module.css';
 
+const ITEMS_PER_PAGE = 20;
+
 const HomePage = () => {
-  const {
-    loading,
-    error,
-    validPage,
-    totalPages,
-    paginatedItems,
-    handleSearch,
-    handlePageChange,
-  } = useHomePage();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const {items, loading, error, fetchAllItems, setSearchTerm} = usePokemonStore();
+  const currentPage = parseInt(searchParams.get('page') || '1', 10);
+  const validPage = isNaN(currentPage) || currentPage < 1 ? 1 : currentPage;
+
+  useEffect(() => {
+    if (items.length === 0 && !loading) {
+      fetchAllItems();
+    }
+  }, [items.length, loading, fetchAllItems]);
+
+  const handleSearch = (term: string) => {
+    setSearchTerm(term);
+    setSearchParams({ page: '1' });
+  };
+
+  const handlePageChange = (page: number) => {
+    setSearchParams({ page: String(page) });
+  };
+
+  const totalPages = Math.ceil(items.length / ITEMS_PER_PAGE);
+  const startIndex = (validPage - 1) * ITEMS_PER_PAGE;
+  const paginatedItems = items.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
   return (
     <Main>

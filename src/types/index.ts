@@ -86,3 +86,14 @@ export interface ErrorTestButtonProps {
 export interface ErrorTestButtonState {
   shouldThrow: boolean;
 }
+
+export interface PokemonStoreState {
+  items: Item[];
+  searchTerm: string;
+  loading: boolean;
+  error: string | null;
+  fetchAllItems: () => Promise<void>;
+  searchItems: (term: string) => Promise<void>;
+  setSearchTerm: (term: string) => void;
+  clearError: () => void;
+}
