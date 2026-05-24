@@ -2,9 +2,21 @@ import { create } from 'zustand';
 import { apiService } from '../services/api';
 import type { PokemonStoreState } from '../types';
 
+const STORAGE_KEY = 'pokemonSearchTerm';
+
+const getInitialSearchTerm = (): string => {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    return saved ? JSON.parse(saved) : '';
+  } catch (error) {
+    console.error('Failed to read searchTerm from localStorage', error);
+    return '';
+  }
+};
+
 export const usePokemonStore = create<PokemonStoreState>((set, get) => ({
   items: [],
-  searchTerm: '',
+  searchTerm: getInitialSearchTerm(),
   loading: false,
   error: null,
 
@@ -20,6 +32,13 @@ export const usePokemonStore = create<PokemonStoreState>((set, get) => ({
   },
 
   searchItems: async (term: string) => {
+
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(term));
+    } catch (error) {
+      console.error('Failed to save searchTerm to localStorage', error);
+    }
+    
     set({ loading: true, error: null, searchTerm: term });
     try {
       const results = await apiService.searchItems(term);
