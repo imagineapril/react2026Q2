@@ -7,9 +7,7 @@ import styles from './Search.module.css';
 const Search = ({onSearch, initialSearchTerm = ''}: SearchProps) => {
 
   const { searchTerm, setSearchTerm } = usePokemonStore();
-  const [inputValue, setInputValue] = useState(
-    searchTerm|| initialSearchTerm
-  );
+  const [inputValue, setInputValue] = useState(searchTerm || initialSearchTerm);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value);

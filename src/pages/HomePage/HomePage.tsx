@@ -37,7 +37,7 @@ const HomePage = () => {
 
   return (
     <Main>
-      <Search onSearch={handleSearch} initialSearchTerm="" />
+      <Search onSearch={handleSearch} />
 
       {loading && <Loader />}
 
