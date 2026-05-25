@@ -1,0 +1,58 @@
+import { usePokemonStore } from '../../store/pokemonStore';
+import styles from './Flyout.module.css';
+
+const Flyout = () => {
+  const selectedIds = usePokemonStore((state) => state.selectedIds);
+  const allItems = usePokemonStore((state) => state.allItems);
+  const clearSelected = usePokemonStore((state) => state.clearSelected);
+  const selectedCount = selectedIds.size;
+
+  if (selectedCount === 0) return null;
+
+  const handleUnselectAll = () => {
+    clearSelected();
+  };
+
+  const handleDownload = () => {
+    const selectedPokemons = allItems.filter((item) => selectedIds.has(item.id));
+    if (selectedPokemons.length === 0) return;
+
+    const headers = ['Name', 'Description', 'Height', 'Weight', 'Types'];
+    const rows = selectedPokemons.map((p) => [
+      p.name,
+      p.description,
+      p.height ?? '',
+      p.weight ?? '',
+      p.types?.join(', ') ?? '',
+    ]);
+    const csvContent = [headers, ...rows].map(row => row.join(',')).join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.href = url;
+    link.setAttribute('download', `${selectedCount}_items.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
+  return (
+    <div className={styles.flyout}>
+      <div className={styles.content}>
+        <span className={styles.count}>Selected: {selectedCount}</span>
+        <div className={styles.buttons}>
+          <button onClick={handleUnselectAll} className={styles.button}>
+            Unselect All
+          </button>
+          <button onClick={handleDownload} className={styles.button}>
+            Download CSV
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Flyout;
