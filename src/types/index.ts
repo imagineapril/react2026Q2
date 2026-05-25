@@ -61,6 +61,7 @@ export interface ResultsProps {
 }
 
 export interface CardProps {
+  id: number; 
   name: string;
   description: string;
   image?: string;
@@ -91,8 +92,12 @@ export interface PokemonStoreState {
   searchTerm: string;
   loading: boolean;
   error: string | null;
+  selectedIds: Set<number>;
   fetchAllItems: () => Promise<void>;
   searchItems: (term: string) => Promise<void>;
   setSearchTerm: (term: string) => void;
   clearError: () => void;
+  toggleSelected: (id: number) => void;
+  clearSelected: () => void;
+  isSelected: (id: number) => boolean;
 }

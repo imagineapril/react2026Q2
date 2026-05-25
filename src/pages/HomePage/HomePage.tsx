@@ -16,6 +16,9 @@ const HomePage = () => {
   const currentPage = parseInt(searchParams.get('page') || '1', 10);
   const validPage = isNaN(currentPage) || currentPage < 1 ? 1 : currentPage;
 
+  const selectedCount = usePokemonStore((state) => state.selectedIds.size);
+  const clearSelected = usePokemonStore((state) => state.clearSelected);
+
   useEffect(() => {
     if (searchTerm && items.length === 0 && !loading) {
       setSearchTerm(searchTerm);
@@ -44,6 +47,12 @@ const HomePage = () => {
   return (
     <Main>
       <Search onSearch={handleSearch} />
+      {selectedCount > 0 && (
+        <div style={{ margin: '10px 0' }}>
+        <span>Selected: {selectedCount}</span>
+        <button onClick={clearSelected}>Clear all</button>
+        </div>
+      )}
 
       {loading && <Loader />}
 
