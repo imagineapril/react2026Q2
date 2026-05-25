@@ -39,3 +39,17 @@ describe('apiService', () => {
     getAllItemsSpy.mockRestore();
   });
 });
+
+it('getAllItems uses cache on subsequent calls', async () => {
+  const { apiService } = await import('./api');
+  const first = await apiService.getAllItems();
+  const second = await apiService.getAllItems();
+  expect(first).toBe(second); 
+});
+
+it('searchItems returns all items when search term is empty', async () => {
+  const { apiService } = await import('./api');
+  const all = await apiService.getAllItems();
+  const result = await apiService.searchItems('');
+  expect(result).toEqual(all);
+});
