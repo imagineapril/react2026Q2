@@ -53,7 +53,6 @@ export interface AppState {
 
 export interface SearchProps {
   onSearch: (term: string) => void;
-  initialSearchTerm?: string;
 }
 
 export interface ResultsProps {

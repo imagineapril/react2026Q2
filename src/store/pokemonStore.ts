@@ -8,8 +8,7 @@ const getInitialSearchTerm = (): string => {
   try {
     const saved = localStorage.getItem(STORAGE_KEY);
     return saved ? JSON.parse(saved) : '';
-  } catch (error) {
-    console.error('Failed to read searchTerm from localStorage', error);
+  } catch {
     return '';
   }
 };
@@ -38,7 +37,7 @@ export const usePokemonStore = create<PokemonStoreState>((set, get) => ({
     } catch (error) {
       console.error('Failed to save searchTerm to localStorage', error);
     }
-    
+
     set({ loading: true, error: null, searchTerm: term });
     try {
       const results = await apiService.searchItems(term);
@@ -50,7 +49,6 @@ export const usePokemonStore = create<PokemonStoreState>((set, get) => ({
   },
 
   setSearchTerm: (term: string) => {
-    if (term === get().searchTerm) return;
     get().searchItems(term);
   },
 

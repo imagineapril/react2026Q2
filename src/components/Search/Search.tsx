@@ -4,10 +4,10 @@ import type { SearchProps } from '../../types';
 import Button from '../Button/Button';
 import styles from './Search.module.css';
 
-const Search = ({onSearch, initialSearchTerm = ''}: SearchProps) => {
+const Search = ({onSearch}: SearchProps) => {
 
   const { searchTerm, setSearchTerm } = usePokemonStore();
-  const [inputValue, setInputValue] = useState(searchTerm || initialSearchTerm);
+  const [inputValue, setInputValue] = useState(searchTerm);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value);
