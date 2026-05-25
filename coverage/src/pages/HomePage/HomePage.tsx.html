@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">96.29% </span>
+                <span class="strong">95.65% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>26/27</span>
+                <span class='fraction'>22/23</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">76.19% </span>
+                <span class="strong">78.94% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>16/21</span>
+                <span class='fraction'>15/19</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>6/6</span>
+                <span class='fraction'>4/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">95.83% </span>
+                <span class="strong">95.45% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>23/24</span>
+                <span class='fraction'>21/22</span>
             </div>
         
             
@@ -139,13 +139,8 @@
 <a name='L74'></a><a href='#L74'>74</a>
 <a name='L75'></a><a href='#L75'>75</a>
 <a name='L76'></a><a href='#L76'>76</a>
-<a name='L77'></a><a href='#L77'>77</a>
-<a name='L78'></a><a href='#L78'>78</a>
-<a name='L79'></a><a href='#L79'>79</a>
-<a name='L80'></a><a href='#L80'>80</a>
-<a name='L81'></a><a href='#L81'>81</a>
-<a name='L82'></a><a href='#L82'>82</a>
-<a name='L83'></a><a href='#L83'>83</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L77'></a><a href='#L77'>77</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -162,9 +157,6 @@
 <span class="cline-any cline-yes">16x</span>
 <span class="cline-any cline-yes">16x</span>
 <span class="cline-any cline-yes">16x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">62x</span>
-<span class="cline-any cline-yes">62x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">16x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -223,10 +215,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useEffect, useRef  } from 'react';
 import { Outlet, useSearchParams } from 'react-router-dom';
 import Main from '../../layout/Main/Main';
@@ -234,6 +222,7 @@ import Search from '../../components/Search/Search';
 import Results from '../../components/Results/Results';
 import Loader from '../../components/Loader/Loader';
 import Pagination from '../../components/Pagination/Pagination';
+import Flyout from '../../components/Flyout/Flyout';
 import { usePokemonStore } from '../../store/pokemonStore';
 import styles from './HomePage.module.css';
 &nbsp;
@@ -244,9 +233,6 @@ const HomePage = () =&gt; {
   const {items, loading, error, fetchAllItems, setSearchTerm, searchTerm} = usePokemonStore();
   const currentPage = parseInt(searchParams.get('page') || <span class="branch-1 cbranch-no" title="branch not covered" >'1', 1</span>0);
   const validPage = isNaN(currentPage) || currentPage &lt; 1 ? <span class="branch-0 cbranch-no" title="branch not covered" >1 : c</span>urrentPage;
-&nbsp;
-  const selectedCount = usePokemonStore((state) =&gt; state.selectedIds.size);
-  const clearSelected = usePokemonStore((state) =&gt; state.clearSelected);
 &nbsp;
   const initialLoadDone = useRef(false);
 &nbsp;
@@ -276,12 +262,6 @@ const HomePage = () =&gt; {
   return (
     &lt;Main&gt;
       &lt;Search onSearch={handleSearch} /&gt;
-      {selectedCount &gt; 0 &amp;&amp; (
-<span class="branch-1 cbranch-no" title="branch not covered" >        &lt;div style={{ margin: '10px 0' }}&gt;</span>
-        &lt;span&gt;Selected: {selectedCount}&lt;/span&gt;
-        &lt;button onClick={clearSelected}&gt;Clear all&lt;/button&gt;
-        &lt;/div&gt;
-      )}
 &nbsp;
       {loading &amp;&amp; &lt;Loader /&gt;}
 &nbsp;
@@ -305,6 +285,8 @@ const HomePage = () =&gt; {
           &lt;/div&gt;
         &lt;/div&gt;
       )}
+&nbsp;
+      &lt;Flyout /&gt;
     &lt;/Main&gt;
   );
 };
@@ -316,7 +298,7 @@ export default HomePage;</pre></td></tr></table></pre>
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-05-25T08:08:01.048Z
+                at 2026-05-25T10:19:01.585Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
