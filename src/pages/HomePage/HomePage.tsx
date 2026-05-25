@@ -12,15 +12,21 @@ const ITEMS_PER_PAGE = 20;
 
 const HomePage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const {items, loading, error, fetchAllItems, setSearchTerm} = usePokemonStore();
+  const {items, loading, error, fetchAllItems, setSearchTerm, searchTerm} = usePokemonStore();
   const currentPage = parseInt(searchParams.get('page') || '1', 10);
   const validPage = isNaN(currentPage) || currentPage < 1 ? 1 : currentPage;
 
   useEffect(() => {
-    if (items.length === 0 && !loading) {
+    if (searchTerm && items.length === 0 && !loading) {
+      setSearchTerm(searchTerm);
+    }
+  }, [searchTerm, items.length, loading, setSearchTerm]);
+
+  useEffect(() => {
+    if (!searchTerm && items.length === 0 && !loading) {
       fetchAllItems();
     }
-  }, [items.length, loading, fetchAllItems]);
+  }, [searchTerm, items.length, loading, fetchAllItems]);
 
   const handleSearch = (term: string) => {
     setSearchTerm(term);
