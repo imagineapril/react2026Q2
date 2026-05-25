@@ -1,6 +1,12 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import Search from './Search';
+import { usePokemonStore } from '../../store/pokemonStore';
+
+beforeEach(() => {
+  usePokemonStore.setState({ items: [], loading: false, error: null, searchTerm: '' });
+  localStorage.clear();
+});
 
 describe('Search Component', () => {
   beforeEach(() => {
@@ -16,6 +22,7 @@ describe('Search Component', () => {
 
   it('displays saved search term from localStorage on mount', () => {
     localStorage.setItem('pokemonSearchTerm', '"pikachu"');
+    usePokemonStore.setState({ searchTerm: 'pikachu' }); 
     render(<Search onSearch={() => {}} />);
     const input = screen.getByPlaceholderText('Enter pokemon name');
     expect(input).toHaveValue('pikachu');
