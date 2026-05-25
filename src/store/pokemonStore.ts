@@ -18,6 +18,7 @@ export const usePokemonStore = create<PokemonStoreState>((set, get) => ({
   searchTerm: getInitialSearchTerm(),
   loading: false,
   error: null,
+  selectedIds: new Set<number>(),
 
   fetchAllItems: async () => {
     set({ loading: true, error: null });
@@ -53,4 +54,23 @@ export const usePokemonStore = create<PokemonStoreState>((set, get) => ({
   },
 
   clearError: () => set({ error: null }),
+
+  toggleSelected: (id: number) => {
+    const { selectedIds } = get();
+    const newSet = new Set(selectedIds);
+    if (newSet.has(id)) {
+      newSet.delete(id);
+    } else {
+      newSet.add(id);
+    }
+    set({ selectedIds: newSet });
+  },
+
+  clearSelected: () => {
+    set({ selectedIds: new Set<number>() });
+  },
+
+  isSelected: (id: number) => {
+    return get().selectedIds.has(id);
+  },
 }));

@@ -152,6 +152,26 @@
   line-height: 1.5;
 }
 
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.checkbox {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: var(--color-primary);
+  transition: transform var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.checkbox:hover {
+  transform: scale(1.1);
+}
+
 @media (max-width: 768px) {
   .card {
     padding: var(--spacing-md);
@@ -177,7 +197,6 @@
   }
 }
 
-/* 🆕 Адаптивность для мобильных (320px) */
 @media (max-width: 320px) {
   .card {
     flex-direction: column;
@@ -202,5 +221,13 @@
   
   .types {
     justify-content: center;
+  }
+
+  .header {
+    gap: var(--spacing-sm);
+  }
+  .checkbox {
+    width: 18px;
+    height: 18px;
   }
 }

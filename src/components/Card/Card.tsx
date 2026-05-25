@@ -1,5 +1,6 @@
 import type { CardProps } from '../../types';
 import styles from './Card.module.css';
+import { usePokemonStore } from '../../store/pokemonStore';
 
 const getTypeColor = (type: string): string => {
       const colors: Record<string, string> = {
@@ -25,9 +26,16 @@ const getTypeColor = (type: string): string => {
       return colors[type] || '#ffffff';
     };
 
-const Card = ({ name, description, image, types }:CardProps) => {
+const Card = ({ id, name, description, image, types }:CardProps) => {
     const mainType = types && types.length > 0 ? types[0] : 'normal';
     const nameColor = getTypeColor(mainType);
+    const isSelected = usePokemonStore((state) => state.selectedIds.has(id));
+    const toggleSelected = usePokemonStore((state) => state.toggleSelected);
+
+    const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.stopPropagation();
+    toggleSelected(id);
+    };
 
     return (
       <div className={styles.card}>
@@ -37,7 +45,17 @@ const Card = ({ name, description, image, types }:CardProps) => {
           </div>
         )}
         <div className={styles.content}>
-          <h3 className={styles.name} style={{ color: nameColor }}>{name}</h3>
+          <div className={styles.header}>
+            <h3 className={styles.name} style={{ color: nameColor }}>{name}</h3>
+            <input
+              type="checkbox"
+              className={styles.checkbox}
+              checked={isSelected}
+              onChange={handleCheckboxChange}
+              onClick={(e) => e.stopPropagation()}
+              aria-label={`Select ${name}`}
+            />
+          </div>
           {types && types.length > 0 && (
             <div className={styles.types}>
               {types.map(type => (
