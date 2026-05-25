@@ -4,6 +4,7 @@ import { MemoryRouter } from 'react-router-dom';
 import HomePage from './HomePage';
 import { apiService } from '../../services/api';
 import { mockPokemonList } from '../../mockData';
+import { usePokemonStore } from '../../store/pokemonStore';
 
 vi.mock('../../services/api', () => ({
   apiService: {
@@ -14,6 +15,14 @@ vi.mock('../../services/api', () => ({
 
 describe('HomePage', () => {
   beforeEach(() => {
+    usePokemonStore.setState({
+      items: [],
+      searchTerm: '',
+      loading: false,
+      error: null,
+      selectedIds: new Set(),
+    });
+    localStorage.clear();
     vi.mocked(apiService.getAllItems).mockResolvedValue(mockPokemonList);
     vi.mocked(apiService.searchItems).mockResolvedValue([]);
   });
@@ -72,6 +81,11 @@ describe('HomePage', () => {
     const input = screen.getByPlaceholderText('Enter pokemon name');
     await userEvent.type(input, 'pikachu');
     await userEvent.click(screen.getByRole('button', { name: 'Search' }));
+
+    await waitFor(() => {
+      expect(apiService.searchItems).toHaveBeenCalledWith('pikachu');
+    });
+    
     await waitFor(() => {
       expect(screen.getByText('Results (0)')).toBeInTheDocument();
     });
