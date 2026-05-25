@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef  } from 'react';
 import { Outlet, useSearchParams } from 'react-router-dom';
 import Main from '../../layout/Main/Main';
 import Search from '../../components/Search/Search';
@@ -19,17 +19,17 @@ const HomePage = () => {
   const selectedCount = usePokemonStore((state) => state.selectedIds.size);
   const clearSelected = usePokemonStore((state) => state.clearSelected);
 
-  useEffect(() => {
-    if (searchTerm && items.length === 0 && !loading) {
-      setSearchTerm(searchTerm);
-    }
-  }, [searchTerm, items.length, loading, setSearchTerm]);
+  const initialLoadDone = useRef(false);
 
   useEffect(() => {
-    if (!searchTerm && items.length === 0 && !loading) {
+    if (initialLoadDone.current) return;
+    initialLoadDone.current = true;
+    if (searchTerm) {
+      setSearchTerm(searchTerm);
+    } else {
       fetchAllItems();
     }
-  }, [searchTerm, items.length, loading, fetchAllItems]);
+  }, [searchTerm, setSearchTerm, fetchAllItems]);
 
   const handleSearch = (term: string) => {
     setSearchTerm(term);
