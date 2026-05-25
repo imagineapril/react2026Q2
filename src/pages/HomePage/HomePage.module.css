@@ -1,0 +1,21 @@
+.splitLayout {
+  display: flex;
+  gap: var(--spacing-lg);
+}
+
+.leftPanel {
+  flex: 1;
+}
+
+.rightPanel {
+  flex: 0 0 360px;
+}
+
+@media (max-width: 768px) {
+  .splitLayout {
+    flex-direction: column;
+  }
+  .rightPanel {
+    flex: auto;
+  }
+}

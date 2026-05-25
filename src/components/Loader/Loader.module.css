@@ -1,0 +1,133 @@
+.loaderContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-xl);
+  min-height: 300px;
+}
+
+.pokeballLoader {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  animation: spin 1s linear infinite;
+}
+
+.pokeballTop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  background: #EE3030;
+  border-radius: 40px 40px 0 0;
+  z-index: 1;
+}
+
+.pokeballBottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  background: white;
+  border-radius: 0 0 40px 40px;
+  z-index: 1;
+}
+
+.pokeballButton {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 16px;
+  height: 16px;
+  background: #222224;
+  border-radius: 50%;
+  z-index: 3;
+}
+
+.pokeballButton::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 8px;
+  height: 8px;
+  background: white;
+  border-radius: 50%;
+}
+
+.pokeballLoader::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 6px;
+  background: #222224;
+  transform: translateY(-50%);
+  z-index: 2;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.loaderText {
+  margin-top: var(--spacing-lg);
+  font-size: var(--font-size-lg);
+  color: var(--color-primary);
+  text-align: center;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .loaderContainer {
+    padding: var(--spacing-lg);
+    min-height: 250px;
+  }
+  
+  .pokeballLoader {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .loaderText {
+    font-size: var(--font-size-md);
+    margin-top: var(--spacing-md);
+  }
+}
+
+@media (max-width: 320px) {
+  .loaderContainer {
+    padding: var(--spacing-md);
+    min-height: 200px;
+  }
+  
+  .pokeballLoader {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .loaderText {
+    font-size: var(--font-size-sm);
+    margin-top: var(--spacing-sm);
+  }
+}
