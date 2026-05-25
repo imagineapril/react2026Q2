@@ -5,6 +5,7 @@ import Search from '../../components/Search/Search';
 import Results from '../../components/Results/Results';
 import Loader from '../../components/Loader/Loader';
 import Pagination from '../../components/Pagination/Pagination';
+import Flyout from '../../components/Flyout/Flyout';
 import { usePokemonStore } from '../../store/pokemonStore';
 import styles from './HomePage.module.css';
 
@@ -15,9 +16,6 @@ const HomePage = () => {
   const {items, loading, error, fetchAllItems, setSearchTerm, searchTerm} = usePokemonStore();
   const currentPage = parseInt(searchParams.get('page') || '1', 10);
   const validPage = isNaN(currentPage) || currentPage < 1 ? 1 : currentPage;
-
-  const selectedCount = usePokemonStore((state) => state.selectedIds.size);
-  const clearSelected = usePokemonStore((state) => state.clearSelected);
 
   const initialLoadDone = useRef(false);
 
@@ -47,12 +45,6 @@ const HomePage = () => {
   return (
     <Main>
       <Search onSearch={handleSearch} />
-      {selectedCount > 0 && (
-        <div style={{ margin: '10px 0' }}>
-        <span>Selected: {selectedCount}</span>
-        <button onClick={clearSelected}>Clear all</button>
-        </div>
-      )}
 
       {loading && <Loader />}
 
@@ -76,6 +68,8 @@ const HomePage = () => {
           </div>
         </div>
       )}
+
+      <Flyout />
     </Main>
   );
 };

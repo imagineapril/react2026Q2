@@ -15,6 +15,7 @@ const getInitialSearchTerm = (): string => {
 
 export const usePokemonStore = create<PokemonStoreState>((set, get) => ({
   items: [],
+  allItems: [],
   searchTerm: getInitialSearchTerm(),
   loading: false,
   error: null,
@@ -24,7 +25,7 @@ export const usePokemonStore = create<PokemonStoreState>((set, get) => ({
     set({ loading: true, error: null });
     try {
       const allItems = await apiService.getAllItems();
-      set({ items: allItems, loading: false });
+      set({ allItems, items: allItems, loading: false });
     } catch (err) {
       set({ error: 'Failed to load items', loading: false });
       console.error(err);
@@ -32,7 +33,6 @@ export const usePokemonStore = create<PokemonStoreState>((set, get) => ({
   },
 
   searchItems: async (term: string) => {
-
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(term));
     } catch (error) {

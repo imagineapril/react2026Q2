@@ -89,6 +89,7 @@ export interface ErrorTestButtonState {
 
 export interface PokemonStoreState {
   items: Item[];
+  allItems: Item[];
   searchTerm: string;
   loading: boolean;
   error: string | null;

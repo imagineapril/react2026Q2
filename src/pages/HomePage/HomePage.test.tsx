@@ -13,6 +13,10 @@ vi.mock('../../services/api', () => ({
   },
 }));
 
+vi.mock('../../components/Flyout/Flyout', () => ({
+  default: () => <div data-testid="flyout-mock" />,
+}));
+
 describe('HomePage', () => {
   beforeEach(() => {
     usePokemonStore.setState({
