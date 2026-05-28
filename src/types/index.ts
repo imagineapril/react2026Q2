@@ -10,6 +10,33 @@ export interface Item {
   types?: string[];
 }
 
+export interface ApiPokemonListItem {
+  name: string;
+  url: string;
+}
+
+export interface ApiPokemonDetail {
+  id: number;
+  name: string;
+  height: number;
+  weight: number;
+  sprites: {
+    other: {
+      'official-artwork': {
+        front_default: string;
+      };
+    };
+  };
+  types: { type: { name: string } }[];
+}
+
+export interface ApiPokemonSpecies {
+  flavor_text_entries: {
+    flavor_text: string;
+    language: { name: string };
+  }[];
+}
+
 export interface PokemonListResponse {
   count: number;
   next: string | null;
@@ -42,13 +69,6 @@ export interface PokemonDetail {
       url: string;
     };
   }[];
-}
-
-export interface AppState {
-  searchTerm: string;
-  items: Item[];
-  loading: boolean;
-  error: string | null;
 }
 
 export interface SearchProps {
@@ -88,16 +108,7 @@ export interface ErrorTestButtonState {
 }
 
 export interface PokemonStoreState {
-  items: Item[];
-  allItems: Item[];
-  searchTerm: string;
-  loading: boolean;
-  error: string | null;
   selectedIds: Set<number>;
-  fetchAllItems: () => Promise<void>;
-  searchItems: (term: string) => Promise<void>;
-  setSearchTerm: (term: string) => void;
-  clearError: () => void;
   toggleSelected: (id: number) => void;
   clearSelected: () => void;
   isSelected: (id: number) => boolean;
