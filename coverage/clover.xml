@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1779737329644" clover="3.2.0">
-  <project timestamp="1779737329645" name="All files">
+<coverage generated="1779737412716" clover="3.2.0">
+  <project timestamp="1779737412716" name="All files">
     <metrics statements="230" coveredstatements="213" conditionals="99" coveredconditionals="81" methods="77" coveredmethods="69" elements="406" coveredelements="363" complexity="0" loc="230" ncloc="230" packages="22" files="24" classes="24"/>
     <package name="src">
       <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
@@ -44,7 +44,7 @@
         <line num="37" count="0" type="stmt"/>
         <line num="40" count="116" type="stmt"/>
         <line num="55" count="0" type="stmt"/>
-        <line num="62" count="137" type="stmt"/>
+        <line num="62" count="146" type="stmt"/>
       </file>
     </package>
     <package name="src.components.ErrorBoundary">
