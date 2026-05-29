@@ -1,41 +1,29 @@
-import { useEffect, useRef  } from 'react';
 import { Outlet, useSearchParams } from 'react-router-dom';
+import { usePokemonList } from '../../hooks/usePokemonQueries';
 import Main from '../../layout/Main/Main';
 import Search from '../../components/Search/Search';
 import Results from '../../components/Results/Results';
 import Loader from '../../components/Loader/Loader';
 import Pagination from '../../components/Pagination/Pagination';
 import Flyout from '../../components/Flyout/Flyout';
-import { usePokemonStore } from '../../store/pokemonStore';
 import styles from './HomePage.module.css';
 
 const ITEMS_PER_PAGE = 20;
 
 const HomePage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const {items, loading, error, fetchAllItems, setSearchTerm, searchTerm} = usePokemonStore();
+  const searchTerm = searchParams.get('search') || '';
   const currentPage = parseInt(searchParams.get('page') || '1', 10);
   const validPage = isNaN(currentPage) || currentPage < 1 ? 1 : currentPage;
 
-  const initialLoadDone = useRef(false);
-
-  useEffect(() => {
-    if (initialLoadDone.current) return;
-    initialLoadDone.current = true;
-    if (searchTerm) {
-      setSearchTerm(searchTerm);
-    } else {
-      fetchAllItems();
-    }
-  }, [searchTerm, setSearchTerm, fetchAllItems]);
+  const { data: items = [], isLoading, error } = usePokemonList(searchTerm);
 
   const handleSearch = (term: string) => {
-    setSearchTerm(term);
-    setSearchParams({ page: '1' });
+    setSearchParams({ search: term, page: '1' });
   };
 
   const handlePageChange = (page: number) => {
-    setSearchParams({ page: String(page) });
+    setSearchParams({ page: String(page), ...(searchTerm && { search: searchTerm }) });
   };
 
   const totalPages = Math.ceil(items.length / ITEMS_PER_PAGE);
@@ -44,13 +32,13 @@ const HomePage = () => {
 
   return (
     <Main>
-      <Search onSearch={handleSearch} />
+      <Search onSearch={handleSearch} initialValue={searchTerm} />
 
-      {loading && <Loader />}
+      {isLoading && <Loader />}
 
-      {error && <div className="error-message">{error}</div>}
+      {error && <div className="error-message">{error.message}</div>}
 
-      {!loading && !error && (
+      {!isLoading && !error && (
         <div className={styles.splitLayout}>
           <div className={styles.leftPanel}>
             <Results items={paginatedItems} currentPage={validPage} />

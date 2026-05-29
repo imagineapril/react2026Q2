@@ -73,6 +73,7 @@ export interface PokemonDetail {
 
 export interface SearchProps {
   onSearch: (term: string) => void;
+  initialValue?: string;
 }
 
 export interface ResultsProps {

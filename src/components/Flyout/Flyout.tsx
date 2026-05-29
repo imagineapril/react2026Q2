@@ -1,10 +1,11 @@
 import { usePokemonStore } from '../../store/pokemonStore';
+import { usePokemonList } from '../../hooks/usePokemonQueries';
 import styles from './Flyout.module.css';
 
 const Flyout = () => {
   const selectedIds = usePokemonStore((state) => state.selectedIds);
-  const allItems = usePokemonStore((state) => state.allItems);
   const clearSelected = usePokemonStore((state) => state.clearSelected);
+  const { data: allItems = [] } = usePokemonList('');
   const selectedCount = selectedIds.size;
 
   if (selectedCount === 0) return null;
