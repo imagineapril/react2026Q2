@@ -1,7 +1,5 @@
-import { useState, useEffect } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
-import { apiService } from '../../services/api';
-import type { Item } from '../../types';
+import { usePokemonDetail } from '../../hooks/usePokemonQueries';
 import styles from './PokemonDetailPage.module.css';
 
 const PokemonDetailPage = () => {
@@ -10,44 +8,14 @@ const PokemonDetailPage = () => {
   const [searchParams] = useSearchParams();
   const currentPage = searchParams.get('page') || '1';
   
-  const [pokemon, setPokemon] = useState<Item | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    let isMounted = true;
-    const loadPokemon = async () => {
-      if (!id) return;
-      setLoading(true);
-      setError(null);
-      try {
-        const found = await apiService.getItemById(parseInt(id, 10));
-        if (isMounted) {
-          if (found) {
-            setPokemon(found);
-          } else {
-            setError('Pokemon not found');
-          }
-        }
-      } catch (err) {
-        console.error(err);
-        setError('Failed to load details');
-      } finally {
-        setLoading(false);
-      }
-    };
-    loadPokemon();
-    return () => {
-      isMounted = false;
-    }
-  }, [id]);
+  const { data: pokemon, isLoading, error } = usePokemonDetail(id);
 
   const handleClose = () => {
     navigate(`/?page=${currentPage}`);
   };
 
-  if (loading) return <div className={styles.detailContainer}>Loading details...</div>;
-  if (error) return <div className={styles.detailContainer}>Error: {error}</div>;
+  if (isLoading) return <div className={styles.detailContainer}>Loading details...</div>;
+  if (error) return <div className={styles.detailContainer}>Error: {error.message}</div>;
   if (!pokemon) return <div className={styles.detailContainer}>No data</div>;
 
   return (

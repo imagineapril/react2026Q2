@@ -1,13 +1,11 @@
 import { useState } from 'react';
-import { usePokemonStore } from '../../store/pokemonStore';
 import type { SearchProps } from '../../types';
 import Button from '../Button/Button';
 import styles from './Search.module.css';
 
-const Search = ({onSearch}: SearchProps) => {
+const Search = ({onSearch, initialValue = ''}: SearchProps) => {
 
-  const { searchTerm, setSearchTerm } = usePokemonStore();
-  const [inputValue, setInputValue] = useState(searchTerm);
+  const [inputValue, setInputValue] = useState(initialValue);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value);
@@ -22,7 +20,6 @@ const Search = ({onSearch}: SearchProps) => {
 
   const handleSearch = () => {
     const trimmedValue = inputValue.trim();
-    setSearchTerm(trimmedValue)
     onSearch(trimmedValue);
   };
 
