@@ -1,55 +1,62 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
+import { QueryClient, QueryClientProvider, type UseQueryResult} from '@tanstack/react-query';
 import HomePage from './HomePage';
-import { apiService } from '../../services/api';
-import { mockPokemonList } from '../../mockData';
-import { usePokemonStore } from '../../store/pokemonStore';
+import { usePokemonList } from '../../hooks/usePokemonQueries';
+import type { Item } from '../../types';
 
-vi.mock('../../services/api', () => ({
-  apiService: {
-    getAllItems: vi.fn(),
-    searchItems: vi.fn(),
-  },
+vi.mock('../../hooks/usePokemonQueries', () => ({
+  usePokemonList: vi.fn(),
+  pokemonKeys: { lists: () => ['pokemon', 'list'] },
 }));
 
 vi.mock('../../components/Flyout/Flyout', () => ({
   default: () => <div data-testid="flyout-mock" />,
 }));
 
+const queryClient = new QueryClient({
+  defaultOptions: { queries: { retry: false } },
+});
+
+const renderWithRouter = (ui: React.ReactElement, initialEntries = ['/']) => {
+  return render(
+    <QueryClientProvider client={queryClient}>
+      <MemoryRouter initialEntries={initialEntries}>{ui}</MemoryRouter>
+    </QueryClientProvider>
+  );
+};
+
+const mockPokemonList = Array.from({ length: 151 }, (_, i) => ({
+  id: i + 1,
+  name: `Pokemon ${i + 1}`,
+  description: `Description ${i + 1}`,
+  image: `image${i + 1}.png`,
+  height: 10,
+  weight: 100,
+  types: ['normal'],
+}));
+
 describe('HomePage', () => {
   beforeEach(() => {
-    usePokemonStore.setState({
-      items: [],
-      searchTerm: '',
-      loading: false,
+    vi.mocked(usePokemonList).mockReturnValue({
+      data: mockPokemonList,
+      isLoading: false,
       error: null,
-      selectedIds: new Set(),
-    });
-    localStorage.clear();
-    vi.mocked(apiService.getAllItems).mockResolvedValue(mockPokemonList);
-    vi.mocked(apiService.searchItems).mockResolvedValue([]);
+    } as unknown as UseQueryResult<Item[]>);
   });
 
-  it('loads and displays pokemon list', async () => {
-    render(
-      <MemoryRouter initialEntries={['/?page=1']}>
-        <HomePage />
-      </MemoryRouter>
-    );
-    expect(screen.getByText('Loading Pokémon...')).toBeInTheDocument();
+  it('loads and displays pokemon list (first page, 20 items)', async () => {
+    renderWithRouter(<HomePage />);
     await waitFor(() => {
       expect(screen.getByText('Results (20)')).toBeInTheDocument();
     });
     expect(screen.getByText('Pokemon 1')).toBeInTheDocument();
+    expect(screen.queryByText('Pokemon 21')).not.toBeInTheDocument();
   });
 
-  it('paginates correctly', async () => {
-    render(
-      <MemoryRouter initialEntries={['/?page=2']}>
-        <HomePage />
-      </MemoryRouter>
-    );
+  it('paginates correctly: page 2 shows items 21-40', async () => {
+    renderWithRouter(<HomePage />, ['/?page=2']);
     await waitFor(() => {
       expect(screen.getByText('Results (20)')).toBeInTheDocument();
     });
@@ -58,11 +65,7 @@ describe('HomePage', () => {
   });
 
   it('updates displayed items when page changes', async () => {
-    render(
-      <MemoryRouter initialEntries={['/?page=1']}>
-        <HomePage />
-      </MemoryRouter>
-    );
+    renderWithRouter(<HomePage />);
     await waitFor(() => screen.getByText('Results (20)'));
     expect(screen.getByText('Pokemon 1')).toBeInTheDocument();
 
@@ -76,22 +79,13 @@ describe('HomePage', () => {
   });
 
   it('resets page to 1 on search', async () => {
-    render(
-      <MemoryRouter initialEntries={['/?page=3']}>
-        <HomePage />
-      </MemoryRouter>
-    );
-    await waitFor(() => screen.getByText('Results (20)'));
-    const input = screen.getByPlaceholderText('Enter pokemon name');
-    await userEvent.type(input, 'pikachu');
-    await userEvent.click(screen.getByRole('button', { name: 'Search' }));
+  renderWithRouter(<HomePage />, ['/?page=3']);
+  await waitFor(() => screen.getByText('Results (20)'));
 
-    await waitFor(() => {
-      expect(apiService.searchItems).toHaveBeenCalledWith('pikachu');
-    });
-    
-    await waitFor(() => {
-      expect(screen.getByText('Results (0)')).toBeInTheDocument();
-    });
-  });
+  const input = screen.getByPlaceholderText('Enter pokemon name');
+  await userEvent.type(input, 'pikachu');
+  await userEvent.click(screen.getByRole('button', { name: 'Search' }));
+
+  expect(usePokemonList).toHaveBeenLastCalledWith('pikachu');
+});
 });
