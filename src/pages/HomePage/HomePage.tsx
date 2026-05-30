@@ -16,7 +16,10 @@ const HomePage = () => {
   const currentPage = parseInt(searchParams.get('page') || '1', 10);
   const validPage = isNaN(currentPage) || currentPage < 1 ? 1 : currentPage;
 
-  const { data: items = [], isLoading, error } = usePokemonList(searchTerm);
+  const { data, isLoading, error } = usePokemonList(searchTerm, validPage, ITEMS_PER_PAGE);
+  const items = data?.items ?? [];
+  const totalItems = data?.total ?? 0;
+  const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
 
   const handleSearch = (term: string) => {
     setSearchParams({ search: term, page: '1' });
@@ -25,10 +28,6 @@ const HomePage = () => {
   const handlePageChange = (page: number) => {
     setSearchParams({ page: String(page), ...(searchTerm && { search: searchTerm }) });
   };
-
-  const totalPages = Math.ceil(items.length / ITEMS_PER_PAGE);
-  const startIndex = (validPage - 1) * ITEMS_PER_PAGE;
-  const paginatedItems = items.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
   return (
     <Main>
@@ -41,7 +40,7 @@ const HomePage = () => {
       {!isLoading && !error && (
         <div className={styles.splitLayout}>
           <div className={styles.leftPanel}>
-            <Results items={paginatedItems} currentPage={validPage} />
+            <Results items={items} currentPage={validPage} />
             {totalPages > 1 && (
               <Pagination
                 currentPage={validPage}

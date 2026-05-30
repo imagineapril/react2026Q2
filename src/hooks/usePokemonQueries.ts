@@ -1,18 +1,19 @@
 import { useQuery } from '@tanstack/react-query';
-import { fetchAllPokemonItems, searchPokemon, fetchFullPokemonItem } from '../services/pokeApi';
+import { searchPokemon, fetchFullPokemonItem, fetchPokemonPage } from '../services/pokeApi';
+import type { PokemonPageResult } from '../types';
 
 export const pokemonKeys = {
   all: ['pokemon'] as const,
   lists: () => [...pokemonKeys.all, 'list'] as const,
-  list: (filters: { search?: string }) => [...pokemonKeys.lists(), filters] as const,
+  list: (filters: { search?: string; page?: number; limit?: number}) => [...pokemonKeys.lists(), filters] as const,
   details: () => [...pokemonKeys.all, 'detail'] as const,
   detail: (id: number | string) => [...pokemonKeys.details(), id] as const,
 };
 
-export function usePokemonList(searchTerm: string = '') {
-  return useQuery({
-    queryKey: pokemonKeys.list({ search: searchTerm }),
-    queryFn: () => (searchTerm ? searchPokemon(searchTerm) : fetchAllPokemonItems(151)),
+export function usePokemonList(searchTerm: string = '', page: number = 1, limit: number = 20) {
+  return useQuery<PokemonPageResult>({
+    queryKey: pokemonKeys.list({ search: searchTerm, page, limit }),
+    queryFn: () => (searchTerm ? searchPokemon(searchTerm, page, limit) : fetchPokemonPage(page, limit)),
     staleTime: 5 * 60 * 1000,
   });
 }

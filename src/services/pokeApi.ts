@@ -1,6 +1,8 @@
-import type { Item, ApiPokemonListItem, ApiPokemonDetail, ApiPokemonSpecies } from '../types';
+import type { Item, ApiPokemonListItem, ApiPokemonDetail, ApiPokemonSpecies, PokemonPageResult } from '../types';
 
 const BASE_URL = 'https://pokeapi.co/api/v2';
+const ITEMS_PER_PAGE = 20;
+
 
 export async function fetchPokemonList(limit = 151, offset = 0): Promise<ApiPokemonListItem[]> {
   const response = await fetch(`${BASE_URL}/pokemon?limit=${limit}&offset=${offset}`);
@@ -45,8 +47,6 @@ export async function fetchFullPokemonItem(idOrName: string | number): Promise<I
   };
 }
 
-let cachedAllItems: Item[] | null = null;
-
 export async function fetchAllPokemonItems(limit = 151): Promise<Item[]> {
   const list = await fetchPokemonList(limit, 0);
   const batchSize = 20;
@@ -61,11 +61,44 @@ export async function fetchAllPokemonItems(limit = 151): Promise<Item[]> {
   return items;
 }
 
-export async function searchPokemon(term: string): Promise<Item[]> {
+let cachedAllItems: Item[] | null = null;
+
+export async function searchPokemon(term: string, page: number, limit: number = ITEMS_PER_PAGE): Promise<PokemonPageResult> {
   if (!cachedAllItems) {
     cachedAllItems = await fetchAllPokemonItems(151);
   }
-  if (!term.trim()) return cachedAllItems;
-  const lowerTerm = term.toLowerCase();
-  return cachedAllItems.filter(item => item.name.toLowerCase().includes(lowerTerm));
+  const filtered = term.trim()
+    ? cachedAllItems.filter(item => item.name.toLowerCase().includes(term.toLowerCase()))
+    : cachedAllItems;
+  const total = filtered.length;
+  const start = (page - 1) * limit;
+  const items = filtered.slice(start, start + limit);
+  return { items, total };
+}
+
+export async function fetchTotalCount(): Promise<number> {
+  const response = await fetch(`${BASE_URL}/pokemon?limit=0`);
+  const data = await response.json();
+  return data.count;
+}
+
+export async function fetchPokemonPageItems(page: number, itemsPerPage: number): Promise<{ items: Item[]; total: number }> {
+  const offset = (page - 1) * itemsPerPage;
+  const list = await fetchPokemonList(itemsPerPage, offset);
+  const items = await Promise.all(
+    list.map(p => fetchFullPokemonItem(p.name))
+  );
+  const total = await fetchTotalCount();
+  return { items, total };
+}
+
+export async function fetchPokemonPage(page: number, limit: number = ITEMS_PER_PAGE): Promise<PokemonPageResult> {
+  const offset = (page - 1) * limit;
+  const response = await fetch(`${BASE_URL}/pokemon?limit=${limit}&offset=${offset}`);
+  if (!response.ok) throw new Error('Failed to fetch pokemon list');
+  const data = await response.json();
+  const total = data.count;
+  const list: ApiPokemonListItem[] = data.results;
+  const items = await Promise.all(list.map(p => fetchFullPokemonItem(p.name)));
+  return { items, total };
 }
