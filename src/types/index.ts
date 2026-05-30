@@ -71,6 +71,11 @@ export interface PokemonDetail {
   }[];
 }
 
+export interface PokemonPageResult {
+  items: Item[];
+  total: number;
+}
+
 export interface SearchProps {
   onSearch: (term: string) => void;
   initialValue?: string;
