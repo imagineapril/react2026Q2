@@ -118,4 +118,20 @@ describe('PokemonDetailPage', () => {
       expect(screen.getByText(/Oops! Something went wrong/i)).toBeInTheDocument();
     });
   });
+
+  it('caches details and does not refetch on remount', async () => {
+    const mockDetailFn = vi.mocked(usePokemonDetail);
+    mockDetailFn.mockClear();
+    const mockPokemon: Item = { id: 25, name: 'Pikachu', description: 'Electric mouse', image: 'pikachu.png', height: 4, weight: 60, types: ['Electric'] };
+    mockDetailFn.mockReturnValue(mockUseQueryResult(mockPokemon, false, null));
+
+    const { unmount } = renderWithRouter('/pokemon/25');
+    await waitFor(() => screen.getByText('Pikachu'));
+    expect(mockDetailFn).toHaveBeenCalledTimes(1);
+
+    unmount();
+    renderWithRouter('/pokemon/25');
+    await waitFor(() => screen.getByText('Pikachu'));
+    expect(mockDetailFn).toHaveBeenCalledTimes(2);
+  });
 });
