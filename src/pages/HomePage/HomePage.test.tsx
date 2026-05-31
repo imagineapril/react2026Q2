@@ -1,10 +1,11 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
-import { QueryClient, QueryClientProvider, type UseQueryResult} from '@tanstack/react-query';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import HomePage from './HomePage';
 import { usePokemonList } from '../../hooks/usePokemonQueries';
-import type { Item } from '../../types';
+import { mockUseQueryResult } from '../../test/test-utils';
+import type { PokemonPageResult } from '../../types';
 
 vi.mock('../../hooks/usePokemonQueries', () => ({
   usePokemonList: vi.fn(),
@@ -27,7 +28,7 @@ const renderWithRouter = (ui: React.ReactElement, initialEntries = ['/']) => {
   );
 };
 
-const mockPokemonList = Array.from({ length: 151 }, (_, i) => ({
+const allMockPokemons = Array.from({ length: 151 }, (_, i) => ({
   id: i + 1,
   name: `Pokemon ${i + 1}`,
   description: `Description ${i + 1}`,
@@ -37,13 +38,20 @@ const mockPokemonList = Array.from({ length: 151 }, (_, i) => ({
   types: ['normal'],
 }));
 
+const getPageItems = (page: number, itemsPerPage: number): PokemonPageResult => {
+  const start = (page - 1) * itemsPerPage;
+  const end = start + itemsPerPage;
+  const items = allMockPokemons.slice(start, end);
+  return { items, total: allMockPokemons.length };
+};
+
 describe('HomePage', () => {
   beforeEach(() => {
-    vi.mocked(usePokemonList).mockReturnValue({
-      data: mockPokemonList,
-      isLoading: false,
-      error: null,
-    } as unknown as UseQueryResult<Item[]>);
+    vi.mocked(usePokemonList).mockImplementation((page: number = 1, _searchTerm: string = '', limit: number = 20) => {
+      void _searchTerm;
+      const result = getPageItems(page, limit);
+      return mockUseQueryResult(result);
+    });
   });
 
   it('loads and displays pokemon list (first page, 20 items)', async () => {
@@ -86,6 +94,6 @@ describe('HomePage', () => {
   await userEvent.type(input, 'pikachu');
   await userEvent.click(screen.getByRole('button', { name: 'Search' }));
 
-  expect(usePokemonList).toHaveBeenLastCalledWith('pikachu');
-});
+  expect(usePokemonList).toHaveBeenLastCalledWith(1, 'pikachu', 20);
+  });
 });

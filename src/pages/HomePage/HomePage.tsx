@@ -16,7 +16,7 @@ const HomePage = () => {
   const currentPage = parseInt(searchParams.get('page') || '1', 10);
   const validPage = isNaN(currentPage) || currentPage < 1 ? 1 : currentPage;
 
-  const { data, isLoading, error } = usePokemonList(searchTerm, validPage, ITEMS_PER_PAGE);
+  const { data, isLoading, error } = usePokemonList(validPage, searchTerm, ITEMS_PER_PAGE);
   const items = data?.items ?? [];
   const totalItems = data?.total ?? 0;
   const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);

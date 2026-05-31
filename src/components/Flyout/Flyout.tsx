@@ -5,7 +5,8 @@ import styles from './Flyout.module.css';
 const Flyout = () => {
   const selectedIds = usePokemonStore((state) => state.selectedIds);
   const clearSelected = usePokemonStore((state) => state.clearSelected);
-  const { data: allItems = [] } = usePokemonList('');
+  const { data } = usePokemonList(1, '', 151);
+  const allItems = data?.items ?? [];
   const selectedCount = selectedIds.size;
 
   if (selectedCount === 0) return null;

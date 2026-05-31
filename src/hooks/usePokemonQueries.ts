@@ -10,7 +10,7 @@ export const pokemonKeys = {
   detail: (id: number | string) => [...pokemonKeys.details(), id] as const,
 };
 
-export function usePokemonList(searchTerm: string = '', page: number = 1, limit: number = 20) {
+export function usePokemonList(page: number = 1, searchTerm: string = '', limit: number = 20) {
   return useQuery<PokemonPageResult>({
     queryKey: pokemonKeys.list({ search: searchTerm, page, limit }),
     queryFn: () => (searchTerm ? searchPokemon(searchTerm, page, limit) : fetchPokemonPage(page, limit)),
