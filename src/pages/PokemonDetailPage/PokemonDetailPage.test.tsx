@@ -79,7 +79,7 @@ describe('PokemonDetailPage', () => {
     
     vi.mocked(usePokemonDetail).mockReturnValue(loadingResult);
     renderWithRouter('/pokemon/25');
-    expect(screen.getByText(/Loading details/i)).toBeInTheDocument();
+    expect(screen.getByText(/Loading Pokémon/i)).toBeInTheDocument();
   });
 
 
@@ -115,7 +115,7 @@ describe('PokemonDetailPage', () => {
     vi.mocked(usePokemonDetail).mockReturnValue(errorResult);
     renderWithRouter('/pokemon/999');
     await waitFor(() => {
-      expect(screen.getByText(/Error: Not found/i)).toBeInTheDocument();
+      expect(screen.getByText(/Oops! Something went wrong/i)).toBeInTheDocument();
     });
   });
 });
