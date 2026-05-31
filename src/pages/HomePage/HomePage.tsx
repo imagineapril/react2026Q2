@@ -6,6 +6,7 @@ import Results from '../../components/Results/Results';
 import Loader from '../../components/Loader/Loader';
 import Pagination from '../../components/Pagination/Pagination';
 import Flyout from '../../components/Flyout/Flyout';
+import ErrorFallback from '../../components/ErrorFallback/ErrorFallback';
 import styles from './HomePage.module.css';
 
 const ITEMS_PER_PAGE = 20;
@@ -16,7 +17,7 @@ const HomePage = () => {
   const currentPage = parseInt(searchParams.get('page') || '1', 10);
   const validPage = isNaN(currentPage) || currentPage < 1 ? 1 : currentPage;
 
-  const { data, isLoading, error } = usePokemonList(validPage, searchTerm, ITEMS_PER_PAGE);
+  const { data, isLoading, error, refetch } = usePokemonList(validPage, searchTerm, ITEMS_PER_PAGE);
   const items = data?.items ?? [];
   const totalItems = data?.total ?? 0;
   const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
@@ -35,7 +36,7 @@ const HomePage = () => {
 
       {isLoading && <Loader />}
 
-      {error && <div className="error-message">{error.message}</div>}
+      {error && <ErrorFallback message={error.message} onRetry={refetch} />}
 
       {!isLoading && !error && (
         <div className={styles.splitLayout}>
