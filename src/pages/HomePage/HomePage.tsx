@@ -1,5 +1,6 @@
 import { Outlet, useSearchParams } from 'react-router-dom';
-import { usePokemonList } from '../../hooks/usePokemonQueries';
+import { useQueryClient } from '@tanstack/react-query';
+import { usePokemonList, pokemonKeys} from '../../hooks/usePokemonQueries';
 import Main from '../../layout/Main/Main';
 import Search from '../../components/Search/Search';
 import Results from '../../components/Results/Results';
@@ -12,6 +13,7 @@ import styles from './HomePage.module.css';
 const ITEMS_PER_PAGE = 20;
 
 const HomePage = () => {
+  const queryClient = useQueryClient();
   const [searchParams, setSearchParams] = useSearchParams();
   const searchTerm = searchParams.get('search') || '';
   const currentPage = parseInt(searchParams.get('page') || '1', 10);
@@ -30,9 +32,18 @@ const HomePage = () => {
     setSearchParams({ page: String(page), ...(searchTerm && { search: searchTerm }) });
   };
 
+  const handleRefresh = () => {
+    queryClient.invalidateQueries({ queryKey: pokemonKeys.lists() });
+  };
+
   return (
     <Main>
-      <Search onSearch={handleSearch} initialValue={searchTerm} />
+      <div className={styles.searchBar}>
+        <Search onSearch={handleSearch} initialValue={searchTerm} />
+        <button onClick={handleRefresh} className={styles.refreshButton}>
+          🔄 Refresh
+        </button>
+      </div>
 
       {isLoading && <Loader />}
 
