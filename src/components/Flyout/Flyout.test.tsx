@@ -1,10 +1,11 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import { QueryClient, QueryClientProvider, type UseQueryResult} from '@tanstack/react-query';
+import { QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import Flyout from './Flyout';
 import { usePokemonStore } from '../../store/pokemonStore';
 import { usePokemonList } from '../../hooks/usePokemonQueries';
-import type { Item } from '../../types';
+import { mockUseQueryResult } from '../../test/test-utils';
+import type { Item, PokemonPageResult } from '../../types';
 
 vi.mock('../../hooks/usePokemonQueries', () => ({
   usePokemonList: vi.fn(),
@@ -28,11 +29,7 @@ describe('Flyout', () => {
       clearSelected: vi.fn(),
     });
 
-    vi.mocked(usePokemonList).mockReturnValue({
-      data: [],
-      isLoading: false,
-      error: null,
-    } as unknown as UseQueryResult<Item[]>);
+    vi.mocked(usePokemonList).mockReturnValue(mockUseQueryResult({ items: [], total: 0 }));
   });
 
   it('renders null when no items selected', () => {
@@ -44,15 +41,15 @@ describe('Flyout', () => {
     usePokemonStore.setState({
       selectedIds: new Set([1, 2]),
     });
-    vi.mocked(usePokemonList).mockReturnValue({
-      data: [
-        { id: 1, name: 'Bulbasaur', description: '', height: 0, weight: 0, types: [] },
-        { id: 2, name: 'Charmander', description: '', height: 0, weight: 0, types: [] },
-      ],
-      isLoading: false,
-      error: null,
-    } as unknown as UseQueryResult<Item[]>);
+    const mockItems: Item[] = [
+      { id: 1, name: 'Bulbasaur', description: '', height: 0, weight: 0, types: [] },
+      { id: 2, name: 'Charmander', description: '', height: 0, weight: 0, types: [] },
+    ];
+    vi.mocked(usePokemonList).mockReturnValue(
+      mockUseQueryResult<PokemonPageResult>({ items: mockItems, total: 2 })
+    );
     renderWithQueryClient(<Flyout />);
+
     expect(screen.getByText('Selected: 2')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Unselect All' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Download CSV' })).toBeInTheDocument();
@@ -64,11 +61,10 @@ describe('Flyout', () => {
       selectedIds: new Set([1]),
       clearSelected: clearSelectedMock,
     });
-    vi.mocked(usePokemonList).mockReturnValue({
-      data: [{ id: 1, name: 'Bulbasaur', description: '', height: 0, weight: 0, types: [] }],
-      isLoading: false,
-      error: null,
-    } as unknown as UseQueryResult<Item[]>);
+    const mockItems: Item[] = [{ id: 1, name: 'Bulbasaur', description: '', height: 0, weight: 0, types: [] }];
+    vi.mocked(usePokemonList).mockReturnValue(
+      mockUseQueryResult<PokemonPageResult>({ items: mockItems, total: 1 })
+    );
     renderWithQueryClient(<Flyout />);
     fireEvent.click(screen.getByText('Unselect All'));
     expect(clearSelectedMock).toHaveBeenCalledTimes(1);
@@ -83,11 +79,9 @@ describe('Flyout', () => {
       selectedIds: new Set([1, 2]),
       clearSelected: vi.fn(),
     });
-    vi.mocked(usePokemonList).mockReturnValue({
-      data: mockItems,
-      isLoading: false,
-      error: null,
-    } as unknown as UseQueryResult<Item[]>);
+    vi.mocked(usePokemonList).mockReturnValue(
+      mockUseQueryResult<PokemonPageResult>({ items: mockItems, total: 2 })
+    );
 
     const createObjectURLSpy = vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:url');
     const revokeObjectURLSpy = vi.spyOn(URL, 'revokeObjectURL');
@@ -114,11 +108,10 @@ describe('Flyout', () => {
       selectedIds: new Set([999]),
       clearSelected: vi.fn(),
     });
-    vi.mocked(usePokemonList).mockReturnValue({
-      data: [{ id: 1, name: 'Bulbasaur', description: '', height: 0, weight: 0, types: [] }],
-      isLoading: false,
-      error: null,
-    } as unknown as UseQueryResult<Item[]>);
+    const mockItems: Item[] = [{ id: 1, name: 'Bulbasaur', description: '', height: 0, weight: 0, types: [] }];
+    vi.mocked(usePokemonList).mockReturnValue(
+      mockUseQueryResult<PokemonPageResult>({ items: mockItems, total: 1 })
+    );
     renderWithQueryClient(<Flyout />);
     fireEvent.click(screen.getByText('Download CSV'));
     expect(createObjectURLSpy).not.toHaveBeenCalled();
