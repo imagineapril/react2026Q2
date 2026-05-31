@@ -1,10 +1,12 @@
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
-import { usePokemonDetail } from '../../hooks/usePokemonQueries';
+import { useQueryClient } from '@tanstack/react-query';
+import { usePokemonDetail, pokemonKeys } from '../../hooks/usePokemonQueries';
 import ErrorFallback from '../../components/ErrorFallback/ErrorFallback';
 import Loader from '../../components/Loader/Loader';
 import styles from './PokemonDetailPage.module.css';
 
 const PokemonDetailPage = () => {
+  const queryClient = useQueryClient();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -16,6 +18,12 @@ const PokemonDetailPage = () => {
     navigate(`/?page=${currentPage}`);
   };
 
+  const handleRefresh = () => {
+    if (id) {
+      queryClient.invalidateQueries({ queryKey: pokemonKeys.detail(id) });
+    }
+  };
+
   if (isLoading) return <Loader />;
   if (error) return <ErrorFallback message={error.message} onRetry={refetch} />;
   if (!pokemon) return <div className={styles.detailContainer}>No data</div>;
@@ -23,6 +31,7 @@ const PokemonDetailPage = () => {
   return (
     <div className={styles.detailContainer}>
       <button className={styles.closeButton} onClick={handleClose}>✕</button>
+      <button className={styles.refreshButton} onClick={handleRefresh}>🔄 Refresh</button>
       <h2>{pokemon.name}</h2>
       <img src={pokemon.image} alt={pokemon.name} className={styles.image} />
       <p>{pokemon.description}</p>

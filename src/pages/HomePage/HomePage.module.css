@@ -11,11 +11,54 @@
   flex: 0 0 360px;
 }
 
+.searchBar {
+  display: flex;
+  gap: var(--spacing-md);
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: var(--spacing-lg);
+}
+
+.searchBar > :first-child {
+  flex: 1;
+}
+
+.refreshButton {
+  background: var(--color-primary);
+  border: none;
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-md) var(--spacing-xl);
+  font-size: var(--font-size-md);
+  font-weight: 600;
+  color: var(--color-bg-card);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  white-space: nowrap;
+  height: fit-content;
+  margin-bottom: var(--spacing-2xl);
+}
+
+.refreshButton:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-glow);
+  background: var(--color-primary-hover);
+}
+
 @media (max-width: 768px) {
   .splitLayout {
     flex-direction: column;
   }
   .rightPanel {
     flex: auto;
+  }
+
+  .searchBar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .refreshButton {
+    width: 100%;
+    padding: var(--spacing-sm) var(--spacing-lg);
   }
 }
