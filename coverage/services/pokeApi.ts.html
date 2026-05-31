@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">20.33% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/59</span>
+                <span class='fraction'>12/59</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">15.78% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/19</span>
+                <span class='fraction'>3/19</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">6.66% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/15</span>
+                <span class='fraction'>1/15</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">20.75% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/53</span>
+                <span class='fraction'>11/53</span>
             </div>
         
             
@@ -168,8 +168,8 @@
 <a name='L103'></a><a href='#L103'>103</a>
 <a name='L104'></a><a href='#L104'>104</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -229,7 +229,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -261,18 +261,18 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import type { Item, ApiPokemonListItem, ApiPokemonDetail, ApiPokemonSpecies, PokemonPageResult } from '../types';
 &nbsp;
-const BASE_URL = <span class="cstat-no" title="statement not covered" >'https://pokeapi.co/api/v2';</span>
-const ITEMS_PER_PAGE = <span class="cstat-no" title="statement not covered" >20;</span>
+const BASE_URL = 'https://pokeapi.co/api/v2';
+const ITEMS_PER_PAGE = 20;
 &nbsp;
 &nbsp;
 export async function <span class="fstat-no" title="function not covered" >fetchPokemonList(l</span>imit = <span class="branch-0 cbranch-no" title="branch not covered" >151, o</span>ffset = <span class="branch-0 cbranch-no" title="branch not covered" >0): Promise&lt;ApiPokemonListItem[]&gt; {</span>
@@ -332,7 +332,7 @@ export async function <span class="fstat-no" title="function not covered" >fetch
 <span class="cstat-no" title="statement not covered" >  return items;</span>
 }
 &nbsp;
-let cachedAllItems: Item[] | null = <span class="cstat-no" title="statement not covered" >null;</span>
+let cachedAllItems: Item[] | null = null;
 &nbsp;
 export async function <span class="fstat-no" title="function not covered" >searchPokemon(t</span>erm: string, page: number, limit: number = <span class="branch-0 cbranch-no" title="branch not covered" >ITEMS_PER_PAGE): Promise&lt;PokemonPageResult&gt; {</span>
 <span class="cstat-no" title="statement not covered" >  if (!cachedAllItems) {</span>
@@ -363,15 +363,15 @@ export async function <span class="fstat-no" title="function not covered" >fetch
 <span class="cstat-no" title="statement not covered" >  return { items, total };</span>
 }
 &nbsp;
-export async function <span class="fstat-no" title="function not covered" >fetchPokemonPage(p</span>age: number, limit: number = <span class="branch-0 cbranch-no" title="branch not covered" >ITEMS_PER_PAGE): Promise&lt;PokemonPageResult&gt; {</span>
-  const <span class="cstat-no" title="statement not covered" >offset = (page - 1) * limit;</span>
-  const response = <span class="cstat-no" title="statement not covered" >await fetch(`${BASE_URL}/pokemon?limit=${limit}&amp;offset=${offset}`);</span>
-<span class="cstat-no" title="statement not covered" >  if (!response.ok) <span class="cstat-no" title="statement not covered" >throw new Error('Failed to fetch pokemon list');</span></span>
-  const data = <span class="cstat-no" title="statement not covered" >await response.json();</span>
-  const total = <span class="cstat-no" title="statement not covered" >data.count;</span>
-  const list: ApiPokemonListItem[] = <span class="cstat-no" title="statement not covered" >data.results;</span>
-  const items = <span class="cstat-no" title="statement not covered" >await Promise.all(list.<span class="fstat-no" title="function not covered" >map(p</span> =&gt; <span class="cstat-no" title="statement not covered" >fetchFullPokemonItem(p.name))</span>);</span>
-<span class="cstat-no" title="statement not covered" >  return { items, total };</span>
+export async function fetchPokemonPage(page: number, limit: number = ITEMS_PER_PAGE): Promise&lt;PokemonPageResult&gt; {
+  const offset = (page - 1) * limit;
+  const response = await fetch(`${BASE_URL}/pokemon?limit=${limit}&amp;offset=${offset}`);
+  if (!response.ok) throw new Error('Failed to fetch pokemon list');
+  const data = await response.json();
+  const total = data.count;
+  const list: ApiPokemonListItem[] = data.results;
+  const items = await Promise.all(list.<span class="fstat-no" title="function not covered" >map(p</span> =&gt; <span class="cstat-no" title="statement not covered" >fetchFullPokemonItem(p.name))</span>);
+  return { items, total };
 }</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -379,7 +379,7 @@ export async function <span class="fstat-no" title="function not covered" >fetch
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-05-31T11:29:51.682Z
+                at 2026-05-31T13:08:54.707Z
             </div>
         <script src="../prettify.js"></script>
         <script>
