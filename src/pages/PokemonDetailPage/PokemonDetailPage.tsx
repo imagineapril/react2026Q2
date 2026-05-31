@@ -1,5 +1,7 @@
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { usePokemonDetail } from '../../hooks/usePokemonQueries';
+import ErrorFallback from '../../components/ErrorFallback/ErrorFallback';
+import Loader from '../../components/Loader/Loader';
 import styles from './PokemonDetailPage.module.css';
 
 const PokemonDetailPage = () => {
@@ -8,14 +10,14 @@ const PokemonDetailPage = () => {
   const [searchParams] = useSearchParams();
   const currentPage = searchParams.get('page') || '1';
   
-  const { data: pokemon, isLoading, error } = usePokemonDetail(id);
+  const { data: pokemon, isLoading, error, refetch} = usePokemonDetail(id);
 
   const handleClose = () => {
     navigate(`/?page=${currentPage}`);
   };
 
-  if (isLoading) return <div className={styles.detailContainer}>Loading details...</div>;
-  if (error) return <div className={styles.detailContainer}>Error: {error.message}</div>;
+  if (isLoading) return <Loader />;
+  if (error) return <ErrorFallback message={error.message} onRetry={refetch} />;
   if (!pokemon) return <div className={styles.detailContainer}>No data</div>;
 
   return (
