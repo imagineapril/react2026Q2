@@ -92,6 +92,13 @@ export const PortalModal = ({
         aria-labelledby={ariaLabelledBy}
         tabIndex={-1}
       >
+        <button
+          className="modal-close-button"
+          onClick={onClose}
+          aria-label="Закрыть"
+        >
+          ✕
+        </button>
         {children}
       </div>
     </div>,
