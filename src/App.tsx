@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { PortalModal } from './components/PortalModal/PortalModal';
 import { UncontrolledForm } from './components/UncontrolledForm/UncontrolledForm';
+import { ReactHookForm } from './components/ReactHookForm/ReactHookForm';
 import { SubmissionList } from './components/SubmissionList/SubmissionList';
 import './App.css';
 
@@ -37,9 +38,9 @@ function App() {
         onClose={() => setIsRHFOpen(false)}
         ariaLabelledBy="rhf-title"
       >
-        <h2 id="rhf-title">React Hook Form (будет позже)</h2>
+        <h2 id="rhf-title">React Hook Form</h2>
         <p>Здесь будет форма с RHF</p>
-        <button onClick={() => setIsRHFOpen(false)}>Закрыть</button>
+        <ReactHookForm onSuccess={() => setIsRHFOpen(false)} />
       </PortalModal>
     </div>
   );
