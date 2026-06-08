@@ -24,10 +24,20 @@ export const formSchema = z.object({
       return firstChar === firstChar.toUpperCase();
     }, 'Первая буква имени должна быть заглавной'),
 
-  age: z.number()
-    .refine(val => !isNaN(val), 'Возраст обязателен')
-    .min(1, 'Возраст не может быть меньше 1')
-    .max(150, 'Возраст не может быть больше 150'),
+  age: z.any()
+    .refine(
+      (val) => val !== undefined && val !== '' && !isNaN(Number(val)),
+      'Возраст обязателен'
+    )
+    .refine(
+      (val) => Number(val) >= 1,
+      'Возраст не может быть меньше 1'
+    )
+    .refine(
+      (val) => Number(val) <= 150,
+      'Возраст не может быть больше 150'
+    )
+    .transform((val) => Number(val)),
 
   email: z.string()
     .min(1, 'Email обязателен')
