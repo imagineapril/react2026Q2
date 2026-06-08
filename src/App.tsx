@@ -39,7 +39,6 @@ function App() {
         ariaLabelledBy="rhf-title"
       >
         <h2 id="rhf-title">React Hook Form</h2>
-        <p>Здесь будет форма с RHF</p>
         <ReactHookForm onSuccess={() => setIsRHFOpen(false)} />
       </PortalModal>
     </div>

@@ -1,23 +1,13 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useFormStore } from '../../store/useFormStore';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { validateImage, checkPasswordStrength, getStrengthText } from '../../utils/formUtils';
+import { formSchema, type FormSchemaType } from '../../utils/validationSchema';
 import '../FormStyles.css';
 
 interface ReactHookFormProps {
   onSuccess: () => void;
-}
-
-interface FormInputs {
-  name: string;
-  age: number;
-  email: string;
-  gender: 'male' | 'female' | 'other';
-  terms: boolean;
-  password: string;
-  confirmPassword: string;
-  country: string;
-  avatar: string;
 }
 
 const PasswordStrength = ({ password }: { password: string }) => {
@@ -60,8 +50,9 @@ export const ReactHookForm = ({ onSuccess }: ReactHookFormProps) => {
     setValue,
     formState: { errors, isValid },
     reset,
-  } = useForm<FormInputs>({
+  } = useForm<FormSchemaType>({
     mode: 'onChange',
+    resolver: zodResolver(formSchema),
     defaultValues: {
       name: '',
       age: undefined,
@@ -98,18 +89,7 @@ export const ReactHookForm = ({ onSuccess }: ReactHookFormProps) => {
     }
   };
 
-  const validateEmail = (value: string) => {
-    if (!value) return 'Email обязателен';
-    const atIndex = value.indexOf('@');
-    if (atIndex === -1) return 'Email должен содержать @';
-    const localPart = value.slice(0, atIndex);
-    const domain = value.slice(atIndex + 1);
-    if (localPart.length === 0) return 'Локальная часть email не может быть пустой';
-    if (!domain.includes('.')) return 'Домен должен содержать точку';
-    return true;
-  };
-
-  const onSubmit = (data: FormInputs) => {
+  const onSubmit = (data: FormSchemaType) => {
     addSubmission({
       name: data.name,
       age: data.age,
@@ -132,17 +112,7 @@ export const ReactHookForm = ({ onSuccess }: ReactHookFormProps) => {
         <input
           id="rhf-name"
           type="text"
-          {...register('name', {
-            required: 'Имя обязательно',
-            validate: (value) => {
-              if (!value) return true;
-              const firstChar = value.trim().charAt(0);
-              if (firstChar !== firstChar.toUpperCase()) {
-                return 'Первая буква должна быть заглавной';
-              }
-              return true;
-            },
-          })}
+          {...register('name')}
         />
         {errors.name && <span className="error-message">{errors.name.message}</span>}
       </div>
@@ -152,12 +122,7 @@ export const ReactHookForm = ({ onSuccess }: ReactHookFormProps) => {
         <input
           id="rhf-age"
           type="number"
-          {...register('age', {
-            required: 'Возраст обязателен',
-            valueAsNumber: true,
-            min: { value: 1, message: 'Возраст должен быть больше 0' },
-            max: { value: 150, message: 'Возраст не может быть больше 150' },
-          })}
+          {...register('age', { valueAsNumber: true })}
         />
         {errors.age && <span className="error-message">{errors.age.message}</span>}
       </div>
@@ -167,10 +132,7 @@ export const ReactHookForm = ({ onSuccess }: ReactHookFormProps) => {
         <input
           id="rhf-email"
           type="email"
-          {...register('email', {
-            required: 'Email обязателен',
-            validate: validateEmail,
-          })}
+          {...register('email')}
         />
         {errors.email && <span className="error-message">{errors.email.message}</span>}
       </div>
@@ -186,7 +148,7 @@ export const ReactHookForm = ({ onSuccess }: ReactHookFormProps) => {
 
       <div className="form-group checkbox-group">
         <label>
-          <input type="checkbox" {...register('terms', { required: 'Необходимо принять условия' })} />
+          <input type="checkbox" {...register('terms')} />
           Я принимаю условия
         </label>
         {errors.terms && <span className="error-message">{errors.terms.message}</span>}
@@ -197,10 +159,7 @@ export const ReactHookForm = ({ onSuccess }: ReactHookFormProps) => {
         <input
           id="rhf-password"
           type="password"
-          {...register('password', {
-            required: 'Пароль обязателен',
-            minLength: { value: 6, message: 'Минимум 6 символов' },
-          })}
+          {...register('password')}
         />
         {watchPassword && <PasswordStrength password={watchPassword} />}
         {errors.password && <span className="error-message">{errors.password.message}</span>}
@@ -211,10 +170,7 @@ export const ReactHookForm = ({ onSuccess }: ReactHookFormProps) => {
         <input
           id="rhf-confirm"
           type="password"
-          {...register('confirmPassword', {
-            required: 'Подтвердите пароль',
-            validate: (value) => value === watchPassword || 'Пароли не совпадают',
-          })}
+          {...register('confirmPassword')}
         />
         {errors.confirmPassword && <span className="error-message">{errors.confirmPassword.message}</span>}
       </div>
@@ -226,10 +182,7 @@ export const ReactHookForm = ({ onSuccess }: ReactHookFormProps) => {
           type="text"
           list="countries-list"
           autoComplete="off"
-          {...register('country', {
-            required: 'Выберите страну',
-            validate: (value) => countries.includes(value) || 'Страна не найдена в списке',
-          })}
+          {...register('country')}
         />
         <datalist id="countries-list">
           {countries.map((c) => (
