@@ -1,8 +1,18 @@
 import { useFormStore } from '../../store/useFormStore';
+import { useEffect, useState } from 'react';
 import './SubmissionList.css';
 
 export const SubmissionList = () => {
   const submissions = useFormStore((state) => state.submissions);
+  const [newItemId, setNewItemId] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (submissions.length === 0) return;
+    const lastId = submissions[submissions.length - 1].id;
+    setTimeout(() => setNewItemId(lastId), 0);
+    const timer = setTimeout(() => setNewItemId(null), 3000);
+    return () => clearTimeout(timer);
+  }, [submissions]);
 
   if (submissions.length === 0) {
     return <p className="no-data">Нет отправленных форм</p>;
@@ -11,7 +21,7 @@ export const SubmissionList = () => {
   return (
     <div className="submissions-grid">
       {submissions.map((sub) => (
-        <div key={sub.id} className="submission-card">
+        <div key={sub.id} className={`submission-card ${newItemId === sub.id ? 'new-submission' : ''}`}>
           {sub.avatar && (
             <img src={sub.avatar} alt="avatar" className="avatar" />
           )}

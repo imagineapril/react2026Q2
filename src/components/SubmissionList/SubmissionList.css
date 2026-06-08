@@ -33,3 +33,9 @@
   margin-top: 2rem;
   font-style: italic;
 }
+
+.submission-card.new-submission {
+  background-color: #e6fffa;
+  border-left: 4px solid #38b2ac;
+  transition: background-color 0.5s ease;
+}
