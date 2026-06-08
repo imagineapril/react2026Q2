@@ -11,6 +11,11 @@ export default defineConfig([
   globalIgnores(['dist']),
   {
     files: ['**/*.{ts,tsx}'],
+    settings: {
+      react: {
+        version: 'detect',
+      },
+    },
     extends: [
       js.configs.recommended,
       tseslint.configs.recommended,

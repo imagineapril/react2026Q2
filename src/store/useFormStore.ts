@@ -20,7 +20,14 @@ interface FormStore {
   submissions: FormData[];
   addSubmission: (data: FormInput) => void;
   clearSubmissions: () => void;
+  countries: string[];
 }
+
+const defaultCountries = [
+  'Россия', 'США', 'Канада', 'Великобритания', 'Германия', 'Франция', 'Италия', 
+  'Испания', 'Китай', 'Япония', 'Индия', 'Бразилия', 'Австралия', 'Мексика',
+  'Украина', 'Беларусь', 'Казахстан', 'Польша', 'Турция', 'ОАЭ'
+];
 
 export const useFormStore = create<FormStore>()(
   persist(
@@ -38,6 +45,7 @@ export const useFormStore = create<FormStore>()(
           ],
         })),
       clearSubmissions: () => set({ submissions: [] }),
+      countries: defaultCountries,
     }),
     {
       name: 'form-storage',
