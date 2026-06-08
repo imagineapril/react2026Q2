@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 import { useFormStore } from '../../store/useFormStore';
 import { validateImage, checkPasswordStrength, getStrengthText } from '../../utils/formUtils';
-import './UncontrolledForm.css';
+import '../FormStyles.css';
 
 interface UncontrolledFormProps {
   onSuccess: () => void;
