@@ -1,19 +1,16 @@
 import { useRef, useState } from 'react';
 import { useFormStore } from '../../store/useFormStore';
 import { validateImage, checkPasswordStrength, getStrengthText } from '../../utils/formUtils';
+import { formSchema } from '../../utils/validationSchema';
+import { z } from 'zod';
 import '../FormStyles.css';
 
 interface UncontrolledFormProps {
   onSuccess: () => void;
 }
 
-const initialStrength = {
-  score: 0,
-  criteria: { hasNumber: false, hasUppercase: false, hasLowercase: false, hasSpecial: false },
-};
-
-  const StrengthIndicator = ({ strength }: { strength: typeof initialStrength }) => {
-    const { score, criteria } = strength;
+const StrengthIndicator = ({ password }: { password: string }) => {
+    const { score, criteria } = checkPasswordStrength(password);
     const width = `${(score / 4) * 100}%`;
     const color = 
       score === 0 ? '#ff4d4f' :
@@ -56,7 +53,6 @@ export const UncontrolledForm = ({ onSuccess }: UncontrolledFormProps) => {
 
   const [avatarBase64, setAvatarBase64] = useState<string>('');
   const [avatarPreview, setAvatarPreview] = useState<string>('');
-  const [passwordStrength, setPasswordStrength] = useState(initialStrength);
   const [avatarError, setAvatarError] = useState<string>('');
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -80,55 +76,43 @@ export const UncontrolledForm = ({ onSuccess }: UncontrolledFormProps) => {
     }
   };
 
-  const handlePasswordChange = () => {
-    const password = passwordRef.current?.value || '';
-    const { score, criteria } = checkPasswordStrength(password);
-    setPasswordStrength({ score, criteria });
+  const [password, setPassword] = useState('');
+
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newPassword = e.target.value;
+    setPassword(newPassword);
+    setErrors(prev => ({ ...prev }));
   };
 
   const handleSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
 
-    const name = nameRef.current?.value.trim() || '';
-    const age = Number(ageRef.current?.value);
-    const email = emailRef.current?.value.trim() || '';
-    const gender = genderRef.current?.value as 'male' | 'female' | 'other';
-    const terms = termsRef.current?.checked || false;
-    const password = passwordRef.current?.value || '';
-    const confirmPassword = confirmPasswordRef.current?.value || '';
-    const country = countryRef.current?.value.trim() || '';
-
-    const newErrors: Record<string, string> = {};
-    if (!name) newErrors.name = 'Имя обязательно';
-    if (isNaN(age) || age <= 0) newErrors.age = 'Возраст должен быть положительным числом';
-    if (!email.includes('@') || !email.includes('.')) newErrors.email = 'Введите корректный email';
-    if (!terms) newErrors.terms = 'Необходимо принять условия';
-
-    if (!password) newErrors.password = 'Пароль обязателен';
-    else if (password.length < 6) newErrors.password = 'Пароль должен содержать минимум 6 символов';
-    if (password !== confirmPassword) newErrors.confirmPassword = 'Пароли не совпадают';
-    
-    if (!country) newErrors.country = 'Выберите страну';
-    else if (!countries.includes(country)) newErrors.country = 'Страна не найдена в списке';
-    
-    if (!avatarBase64) newErrors.avatar = 'Загрузите изображение (PNG или JPEG)';
-    else if (avatarError) newErrors.avatar = avatarError;
-
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-      return;
+    const formData = {
+      name: nameRef.current?.value.trim() || '',
+      age: ageRef.current?.value === '' ? NaN : Number(ageRef.current?.value),
+      email: emailRef.current?.value.trim() || '',
+      gender: genderRef.current?.value as 'male' | 'female' | 'other',
+      terms: termsRef.current?.checked || false,
+      password: passwordRef.current?.value || '',
+      confirmPassword: confirmPasswordRef.current?.value || '',
+      country: countryRef.current?.value.trim() || '',
+      avatar: avatarBase64,
     }
 
-    addSubmission({
-      name,
-      age,
-      email,
-      gender,
-      terms,
-      password,
-      country,
-      avatar: avatarBase64,
-    });
+    const result = formSchema.safeParse(formData);
+    if (!result.success) {
+      const formattedErrors: Record<string, string> = {};
+      result.error.issues.forEach((err: z.ZodIssue) => {
+        const field = err.path[0];
+        if (field !== undefined) {
+          formattedErrors[String(field)] = err.message;
+        }
+      });
+      setErrors(formattedErrors);
+      return;
+    }
+    const validData = result.data;
+    addSubmission({...validData });
 
     if (nameRef.current) nameRef.current.value = '';
     if (ageRef.current) ageRef.current.value = '';
@@ -142,9 +126,9 @@ export const UncontrolledForm = ({ onSuccess }: UncontrolledFormProps) => {
 
     setAvatarBase64('');
     setAvatarPreview('');
-    setPasswordStrength(initialStrength);
     setErrors({});
     onSuccess();
+    setPassword('');
   };
 
   return (
@@ -157,7 +141,7 @@ export const UncontrolledForm = ({ onSuccess }: UncontrolledFormProps) => {
           ref={nameRef}
           defaultValue=""
         />
-        {errors.name && <span className="error-message">{errors.name}</span>}
+        <div className="error-message">{errors.name}</div>
       </div>
 
       <div className="form-group">
@@ -168,7 +152,7 @@ export const UncontrolledForm = ({ onSuccess }: UncontrolledFormProps) => {
           ref={ageRef}
           defaultValue=""
         />
-        {errors.age && <span className="error-message">{errors.age}</span>}
+        <div className="error-message">{errors.age}</div>
       </div>
 
       <div className="form-group">
@@ -179,7 +163,7 @@ export const UncontrolledForm = ({ onSuccess }: UncontrolledFormProps) => {
           ref={emailRef}
           defaultValue=""
         />
-        {errors.email && <span className="error-message">{errors.email}</span>}
+        <div className="error-message">{errors.email}</div>
       </div>
 
       <div className="form-group">
@@ -196,7 +180,7 @@ export const UncontrolledForm = ({ onSuccess }: UncontrolledFormProps) => {
           <input type="checkbox" ref={termsRef} />
           Я принимаю условия
         </label>
-        {errors.terms && <span className="error-message">{errors.terms}</span>}
+        <div className="error-message">{errors.terms}</div>
       </div>
 
       <div className="form-group">
@@ -207,14 +191,13 @@ export const UncontrolledForm = ({ onSuccess }: UncontrolledFormProps) => {
           ref={passwordRef}
           onChange={handlePasswordChange}
         />
-        <StrengthIndicator strength={passwordStrength}/>
-        {errors.password && <span className="error-message">{errors.password}</span>}
+        {password && <StrengthIndicator password={password} />}
+        <div className="error-message">{errors.password || errors.confirmPassword}</div>
       </div>
 
       <div className="form-group">
         <label htmlFor="uncontrolled-confirm">Подтверждение пароля:</label>
         <input id="uncontrolled-confirm" type="password" ref={confirmPasswordRef} />
-        {errors.confirmPassword && <span className="error-message">{errors.confirmPassword}</span>}
       </div>
 
       <div className="form-group">
@@ -232,7 +215,7 @@ export const UncontrolledForm = ({ onSuccess }: UncontrolledFormProps) => {
             <option key={c} value={c} />
           ))}
         </datalist>
-        {errors.country && <span className="error-message">{errors.country}</span>}
+        <div className="error-message">{errors.country}</div>
       </div>
 
       <div className="form-group">
@@ -249,9 +232,7 @@ export const UncontrolledForm = ({ onSuccess }: UncontrolledFormProps) => {
             <img src={avatarPreview} alt="preview" />
           </div>
         )}
-        {(errors.avatar || avatarError) && (
-          <span className="error-message">{errors.avatar || avatarError}</span>
-        )}
+        <div className="error-message">{errors.avatar || avatarError}</div>
       </div>
 
       <button type="submit">Отправить</button>
