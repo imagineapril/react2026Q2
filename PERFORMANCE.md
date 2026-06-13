@@ -10,18 +10,18 @@
 
 ### Interaction B: Search countries
 
-- **Commit duration**: \_\_\_ s
-- **Render duration**: \_\_\_ ms
+- **Commit duration**: 345.9 ms
+- **Render duration**: 345.9 ms
 - **Screenshot**: ![search-baseline](./screenshots/baseline/search.png)
 
 ### Interaction C: Change year
 
-- **Commit duration**: \_\_\_ s
-- **Render duration**: \_\_\_ ms
+- **Commit duration**: 422.7 ms
+- **Render duration**: 422.7 ms
 - **Screenshot**: ![year-baseline](./screenshots/baseline/year.png)
 
 ### Interaction D: Toggle column
 
-- **Commit duration**: \_\_\_ s
-- **Render duration**: \_\_\_ ms
+- **Commit duration**: 415.6 ms
+- **Render duration**: 415.6 ms
 - **Screenshot**: ![toggle-baseline](./screenshots/baseline/toggle.png)
