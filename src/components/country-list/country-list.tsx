@@ -52,19 +52,19 @@ export const CountryList = ({
     }
   }, [filteredCountries]);
 
-  console.log('filteredCountries length:', filteredCountries.length);
-console.log('first country:', filteredCountries[0]);
   return (
     <div className={styles.countryList}>
       <Virtuoso
         ref={virtuosoRef}
         data={filteredCountries}
         itemContent={(_index, country) => (
-          <CountryCard
-            country={country}
-            selectedYear={selectedYear}
-            selectedColumns={selectedColumns}
-          />
+          <div className={styles.countryItem}>
+            <CountryCard
+              country={country}
+              selectedYear={selectedYear}
+              selectedColumns={selectedColumns}
+            />
+          </div>
         )}
         style={{ height: '800px', width: '100%' }}
       />

@@ -3,3 +3,11 @@
   width: 100%;
   overflow: hidden;
 }
+
+.countryItem {
+  margin-bottom: 16px;
+}
+
+.countryItem:last-child {
+  margin-bottom: 0;
+}
