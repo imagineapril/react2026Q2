@@ -52,6 +52,8 @@ export const CountryList = ({
     }
   }, [filteredCountries]);
 
+  console.log('filteredCountries length:', filteredCountries.length);
+console.log('first country:', filteredCountries[0]);
   return (
     <div className={styles.countryList}>
       <Virtuoso
@@ -64,7 +66,7 @@ export const CountryList = ({
             selectedColumns={selectedColumns}
           />
         )}
-        className={styles.virtuosoContainer}
+        style={{ height: '800px', width: '100%' }}
       />
     </div>
   );
