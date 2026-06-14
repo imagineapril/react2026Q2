@@ -1,7 +1,8 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
+import { Virtuoso, type VirtuosoHandle } from 'react-virtuoso';
 import type { Country } from '../../types';
-import { CountryCard } from '../country-card/country-card';
 import { getPopulationForYear, createYearDataMap } from '../../utils/data-transformers';
+import { CountryCard } from '../country-card/country-card';
 
 import styles from './country-list.module.css';
 
@@ -25,6 +26,8 @@ export const CountryList = ({
   sortField,
   sortOrder,
 }: CountryListProps) => {
+  const virtuosoRef = useRef<VirtuosoHandle>(null);
+
   const filteredCountries = useMemo(() => { 
     return countries
     .filter((c) => {
@@ -43,16 +46,26 @@ export const CountryList = ({
     });
   }, [countries, searchQuery, selectedRegion, selectedYear, sortField, sortOrder]);
 
+  useEffect(() => {
+    if (virtuosoRef.current) {
+      virtuosoRef.current.scrollToIndex(0);
+    }
+  }, [filteredCountries]);
+
   return (
     <div className={styles.countryList}>
-      {filteredCountries.map((country) => (
-        <CountryCard
-          key={country.id}
-          country={country}
-          selectedYear={selectedYear}
-          selectedColumns={selectedColumns}
-        />
-      ))}
+      <Virtuoso
+        ref={virtuosoRef}
+        data={filteredCountries}
+        itemContent={(_index, country) => (
+          <CountryCard
+            country={country}
+            selectedYear={selectedYear}
+            selectedColumns={selectedColumns}
+          />
+        )}
+        className={styles.virtuosoContainer}
+      />
     </div>
   );
 };
