@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import Providers from './providers';
+import Navbar from './components/Navbar';
+import Header from '../src/layout/Header/Header';
 
 export const metadata: Metadata = {
   title: 'Pokemon Search App',
@@ -16,7 +18,11 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <Providers>
-          {children}
+          <Header />
+          <Navbar />
+          <main style={{ padding: '2rem' }}>
+            {children}
+          </main>
         </Providers>
       </body>
     </html>

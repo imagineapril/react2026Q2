@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import Card from '../Card/Card';
 import { type ResultsProps } from '../../types';
 import styles from './Results.module.css';
@@ -14,7 +14,7 @@ const Results = ({ items = [], currentPage = 1 }: ResultsProps) => {
             {items.map(item => (
               <Link
                 key={item.id}
-                to={`/pokemon/${item.id}?page=${currentPage}`}
+                href={`/pokemon/${item.id}?page=${currentPage}`}
                 style={{ textDecoration: 'none' }}
               >
                 <Card
