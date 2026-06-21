@@ -4,6 +4,7 @@ import { use } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
+import Image from 'next/image';
 import { usePokemonDetail, pokemonKeys } from '../../../../src/hooks/usePokemonQueries';
 import ErrorFallback from '../../../../src/components/ErrorFallback/ErrorFallback';
 import Loader from '../../../../src/components/Loader/Loader';
@@ -44,7 +45,15 @@ const PokemonDetailPage = ({ params }: PokemonDetailPageProps) => {
       <button className={styles.closeButton} onClick={handleClose}>✕</button>
       <button className={styles.refreshButton} onClick={handleRefresh}>🔄 {t('refresh')}</button>
       <h2>{pokemon.name}</h2>
-      <img src={pokemon.image} alt={pokemon.name} className={styles.image} />
+      {pokemon.image && (
+        <Image
+          src={pokemon.image}
+          alt={pokemon.name}
+          width={200}
+          height={200}
+          className={styles.image}
+        />
+      )}
       <p>{pokemon.description}</p>
       <p><strong>{tPokemon('height')}:</strong> {pokemon.height} dm</p>
       <p><strong>{tPokemon('weight')}:</strong> {pokemon.weight} hg</p>

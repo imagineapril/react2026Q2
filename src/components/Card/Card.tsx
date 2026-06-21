@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import type { CardProps } from '../../types';
 import styles from './Card.module.css';
 import { usePokemonStore } from '../../store/pokemonStore';
@@ -41,7 +42,12 @@ const Card = ({ id, name, description, image, types }:CardProps) => {
       <div className={styles.card}>
         {image && (
           <div className={styles.imageContainer}>
-            <img src={image} alt={name} className={styles.image} />
+            <Image 
+            src={image} 
+            alt={name} 
+            width={100}
+            height={100}
+            className={styles.image} />
           </div>
         )}
         <div className={styles.content}>
