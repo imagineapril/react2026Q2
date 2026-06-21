@@ -4,9 +4,9 @@ import { use } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
-import { usePokemonDetail, pokemonKeys } from '../../../src/hooks/usePokemonQueries';
-import ErrorFallback from '../../../src/components/ErrorFallback/ErrorFallback';
-import Loader from '../../../src/components/Loader/Loader';
+import { usePokemonDetail, pokemonKeys } from '../../../../src/hooks/usePokemonQueries';
+import ErrorFallback from '../../../../src/components/ErrorFallback/ErrorFallback';
+import Loader from '../../../../src/components/Loader/Loader';
 import styles from './page.module.css';
 
 interface PokemonDetailPageProps {

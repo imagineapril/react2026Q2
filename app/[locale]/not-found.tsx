@@ -1,9 +1,9 @@
-import Link from 'next/link';
-import { useTranslations } from 'next-intl';
+import { Link } from '@/i18n/navigation';
+import { getTranslations } from 'next-intl/server';
 
-export default function NotFound() {
+export default async function NotFound() {
 
-  const t = useTranslations('common');
+  const t = await getTranslations ('common');
 
   return (
     <main>

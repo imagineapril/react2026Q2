@@ -1,9 +1,9 @@
-import Link from 'next/link';
-import { useTranslations } from 'next-intl';
+import { Link } from '@/i18n/navigation';
+import { getTranslations } from 'next-intl/server';
 import styles from './page.module.css';
 
-const AboutPage = () => {
-  const t = useTranslations('common');
+export default async function AboutPage() {
+  const t = await getTranslations('common');
 
   return (
     <div className={styles.container}>
@@ -30,5 +30,3 @@ const AboutPage = () => {
     </div>
   );
 };
-
-export default AboutPage;

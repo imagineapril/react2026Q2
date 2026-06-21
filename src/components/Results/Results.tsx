@@ -1,5 +1,6 @@
 'use client';
-import Link from 'next/link';
+
+import { Link } from '@/i18n/navigation';
 import { useTranslations } from 'next-intl';
 import Card from '../Card/Card';
 import { type ResultsProps } from '../../types';
