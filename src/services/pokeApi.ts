@@ -102,3 +102,14 @@ export async function fetchPokemonPage(page: number, limit: number = ITEMS_PER_P
   const items = await Promise.all(list.map(p => fetchFullPokemonItem(p.name)));
   return { items, total };
 }
+
+export async function getPokemonData(
+  searchTerm: string,
+  page: number,
+  limit: number = ITEMS_PER_PAGE
+): Promise<PokemonPageResult> {
+  if (searchTerm) {
+    return searchPokemon(searchTerm, page, limit);
+  }
+  return fetchPokemonPage(page, limit);
+}

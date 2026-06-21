@@ -1,17 +1,26 @@
 'use client';
+
 import { useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import type { SearchProps } from '../../types';
 import Button from '../Button/Button';
 import styles from './Search.module.css';
 
-const Search = ({onSearch, initialValue = ''}: SearchProps) => {
+interface SearchProps {
+  initialValue?: string;
+}
 
+const Search = ({ initialValue = '' }: SearchProps) => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const t = useTranslations('common');
   const [inputValue, setInputValue] = useState(initialValue);
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(event.target.value);
+  const handleSearch = () => {
+    const params = new URLSearchParams();
+    if (inputValue.trim()) params.set('search', inputValue.trim());
+    params.set('page', '1');
+    router.push(`/?${params.toString()}`);
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -21,18 +30,13 @@ const Search = ({onSearch, initialValue = ''}: SearchProps) => {
     }
   };
 
-  const handleSearch = () => {
-    const trimmedValue = inputValue.trim();
-    onSearch(trimmedValue);
-  };
-
   return (
     <div className={styles.wrapper}>
       <input
         type="text"
         className={styles.input}
         value={inputValue}
-        onChange={handleInputChange}
+        onChange={(e) => setInputValue(e.target.value)}
         onKeyDown={handleKeyDown}
         placeholder={t('searchPlaceholder')}
       />

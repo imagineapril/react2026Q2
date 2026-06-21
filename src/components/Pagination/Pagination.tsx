@@ -1,17 +1,25 @@
 'use client';
 
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import styles from './Pagination.module.css';
 
 interface PaginationProps {
   currentPage: number;
   totalPages: number;
-  onPageChange: (page: number) => void;
 }
 
-const Pagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) => {
+const Pagination = ({ currentPage, totalPages }: PaginationProps) => {
 
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const t = useTranslations('common');
+
+  const handlePageChange = (page: number) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('page', String(page));
+    router.push(`/?${params.toString()}`);
+  };
 
   const getVisiblePages = () => {
     const delta = 2;
@@ -28,7 +36,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) 
     <div className={styles.pagination}>
       <button
         className={styles.button}
-        onClick={() => onPageChange(currentPage - 1)}
+        onClick={() => handlePageChange(currentPage - 1)}
         disabled={currentPage === 1}
       >
         {t('previous')}
@@ -36,7 +44,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) 
 
       {visiblePages[0] > 1 && (
         <>
-          <button className={styles.button} onClick={() => onPageChange(1)}>1</button>
+          <button className={styles.button} onClick={() => handlePageChange(1)}>1</button>
           {visiblePages[0] > 2 && <span className={styles.ellipsis}>...</span>}
         </>
       )}
@@ -45,7 +53,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) 
         <button
           key={page}
           className={`${styles.button} ${currentPage === page ? styles.active : ''}`}
-          onClick={() => onPageChange(page)}
+          onClick={() => handlePageChange(page)}
         >
           {page}
         </button>
@@ -54,13 +62,13 @@ const Pagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) 
       {visiblePages[visiblePages.length - 1] < totalPages && (
         <>
           {visiblePages[visiblePages.length - 1] < totalPages - 1 && <span className={styles.ellipsis}>...</span>}
-          <button className={styles.button} onClick={() => onPageChange(totalPages)}>{totalPages}</button>
+          <button className={styles.button} onClick={() => handlePageChange(totalPages)}>{totalPages}</button>
         </>
       )}
 
       <button
         className={styles.button}
-        onClick={() => onPageChange(currentPage + 1)}
+        onClick={() => handlePageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
       >
         {t('next')}
