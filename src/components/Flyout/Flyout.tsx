@@ -1,8 +1,12 @@
+'use client';
+
+import { useTranslations } from 'next-intl';
 import { usePokemonStore } from '../../store/pokemonStore';
 import { usePokemonList } from '../../hooks/usePokemonQueries';
 import styles from './Flyout.module.css';
 
 const Flyout = () => {
+  const t = useTranslations('common');
   const selectedIds = usePokemonStore((state) => state.selectedIds);
   const clearSelected = usePokemonStore((state) => state.clearSelected);
   const { data } = usePokemonList(1, '', 151);
@@ -43,13 +47,13 @@ const Flyout = () => {
   return (
     <div className={styles.flyout}>
       <div className={styles.content}>
-        <span className={styles.count}>Selected: {selectedCount}</span>
+        <span className={styles.count}>{t('selected')}: {selectedCount}</span>
         <div className={styles.buttons}>
           <button onClick={handleUnselectAll} className={styles.button}>
-            Unselect All
+            {t('unselectAll')}
           </button>
           <button onClick={handleDownload} className={styles.button}>
-            Download CSV
+            {t('downloadCSV')}
           </button>
         </div>
       </div>

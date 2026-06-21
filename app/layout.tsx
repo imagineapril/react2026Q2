@@ -1,8 +1,5 @@
 import type { Metadata } from 'next';
 import './globals.css';
-import Providers from './providers';
-import Navbar from './components/Navbar';
-import Header from '../src/layout/Header/Header';
 
 export const metadata: Metadata = {
   title: 'Pokemon Search App',
@@ -15,15 +12,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html>
       <body>
-        <Providers>
-          <Header />
-          <Navbar />
-          <main style={{ padding: '2rem' }}>
-            {children}
-          </main>
-        </Providers>
+        {children}
       </body>
     </html>
   );

@@ -1,0 +1,41 @@
+{
+  "common": {
+    "appTitle": "Поиск покемонов",
+    "home": "Главная",
+    "about": "О проекте",
+    "searchPlaceholder": "Введите имя покемона",
+    "search": "Найти",
+    "refresh": "Обновить",
+    "noResults": "Ничего не найдено. Попробуйте изменить запрос!",
+    "results": "Результаты",
+    "selectPokemon": "Выберите покемона, чтобы увидеть детали",
+    "close": "Закрыть",
+    "backToHome": "Вернуться на главную",
+    "author": "Автор",
+    "description": "Это приложение демонстрирует маршрутизацию React Router, пагинацию и master-detail представление с использованием PokeAPI.",
+    "courseLink": "Курс React от RS School",
+    "404": "Страница не найдена",
+    "404Message": "Страница, которую вы ищете, не существует.",
+    "goHome": "На главную",
+    "aboutTitle": "О приложении Pokemon Search",
+    "unselectAll": "Снять все",
+    "downloadCSV": "Скачать CSV",
+    "selected": "Выбрано",
+    "previous": "Назад",
+    "next": "Вперёд",
+    "tryAgain": "Попробовать снова",
+    "somethingWentWrong": "Ой! Что-то пошло не так",
+    "reloadPage": "Перезагрузить страницу"
+  },
+  "pokemon": {
+    "height": "Рост",
+    "weight": "Вес",
+    "types": "Типы",
+    "noData": "Нет данных",
+    "details": "Детали покемона"
+  },
+  "theme": {
+    "light": "☀️ Светлая",
+    "dark": "🌙 Тёмная"
+  }
+}

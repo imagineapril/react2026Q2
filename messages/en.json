@@ -1,0 +1,41 @@
+{
+  "common": {
+    "appTitle": "Pokemon Search App",
+    "home": "Home",
+    "about": "About",
+    "searchPlaceholder": "Enter pokemon name",
+    "search": "Search",
+    "refresh": "Refresh",
+    "noResults": "No items found. Try searching for something!",
+    "results": "Results",
+    "selectPokemon": "Select a Pokemon to see details",
+    "close": "Close",
+    "backToHome": "Back to Home",
+    "author": "Author",
+    "description": "This application demonstrates React Router, pagination, and master-detail view using the PokeAPI.",
+    "courseLink": "RS School React Course",
+    "404": "Page not found",
+    "404Message": "The page you are looking for does not exist.",
+    "goHome": "Go Home",
+    "aboutTitle": "About Pokemon Search App",
+    "unselectAll": "Unselect All",
+    "downloadCSV": "Download CSV",
+    "selected": "Selected",
+    "previous": "Previous",
+    "next": "Next",
+    "tryAgain": "Try Again",
+    "somethingWentWrong": "Oops! Something went wrong",
+    "reloadPage": "Reload Page"
+  },
+  "pokemon": {
+    "height": "Height",
+    "weight": "Weight",
+    "types": "Types",
+    "noData": "No data",
+    "details": "Pokemon Details"
+  },
+  "theme": {
+    "light": "☀️ Light",
+    "dark": "🌙 Dark"
+  }
+}

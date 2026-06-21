@@ -1,15 +1,18 @@
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import styles from './page.module.css';
 
 const AboutPage = () => {
+  const t = useTranslations('common');
+
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>About Pokemon Search App</h1>
+      <h1 className={styles.title}>{t('aboutTitle')}</h1>
       <p className={styles.description}>
-        This application demonstrates React Router, pagination, and master-detail view using the PokeAPI.
+        {t('description')}
       </p>
       <p className={styles.author}>
-        <strong>Author:</strong> <a href="https://github.com/imagineapril">imagineapril</a>
+        <strong>{t('author')}:</strong> <a href="https://github.com/imagineapril">imagineapril</a>
       </p>
       <p>
         <a 
@@ -18,11 +21,11 @@ const AboutPage = () => {
           rel="noopener noreferrer"
           className={styles.courseLink}
         >
-          RS School React Course
+          {t('courseLink')}
         </a>
       </p>
       <Link href="/" className={styles.homeLink}>
-        ← Back to Home
+        ← {t('backToHome')}
       </Link>
     </div>
   );

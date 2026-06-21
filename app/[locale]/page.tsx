@@ -2,14 +2,15 @@
 
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useQueryClient } from '@tanstack/react-query';
-import { usePokemonList, pokemonKeys } from '../src/hooks/usePokemonQueries';
-import Main from '../src/layout/Main/Main';
-import Search from '../src/components/Search/Search';
-import Results from '../src/components/Results/Results';
-import Loader from '../src/components/Loader/Loader';
-import Pagination from '../src/components/Pagination/Pagination';
-import Flyout from '../src/components/Flyout/Flyout';
-import ErrorFallback from '../src/components/ErrorFallback/ErrorFallback';
+import { useTranslations } from 'next-intl';
+import { usePokemonList, pokemonKeys } from '../../src/hooks/usePokemonQueries';
+import Main from '../../src/layout/Main/Main';
+import Search from '../../src/components/Search/Search';
+import Results from '../../src/components/Results/Results';
+import Loader from '../../src/components/Loader/Loader';
+import Pagination from '../../src/components/Pagination/Pagination';
+import Flyout from '../../src/components/Flyout/Flyout';
+import ErrorFallback from '../../src/components/ErrorFallback/ErrorFallback';
 import styles from './page.module.css';
 
 const ITEMS_PER_PAGE = 20;
@@ -18,6 +19,7 @@ const HomePage = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const queryClient = useQueryClient();
+  const t = useTranslations('common');
 
   const searchTerm = searchParams.get('search') || '';
   const currentPage = parseInt(searchParams.get('page') || '1', 10);
@@ -50,7 +52,7 @@ const HomePage = () => {
       <div className={styles.searchBar}>
         <Search onSearch={handleSearch} initialValue={searchTerm} />
         <button onClick={handleRefresh} className={styles.refreshButton}>
-          🔄 Refresh
+          🔄 {t('refresh')}
         </button>
       </div>
 
@@ -72,7 +74,7 @@ const HomePage = () => {
           </div>
 
           <div className={styles.rightPanel}>
-            <p>Выберите покемона, чтобы увидеть детали</p>
+            <p>{t('selectPokemon')}</p>
           </div>
         </div>
       )}

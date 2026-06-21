@@ -1,10 +1,13 @@
+'use client';
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 import type { SearchProps } from '../../types';
 import Button from '../Button/Button';
 import styles from './Search.module.css';
 
 const Search = ({onSearch, initialValue = ''}: SearchProps) => {
 
+  const t = useTranslations('common');
   const [inputValue, setInputValue] = useState(initialValue);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -31,9 +34,9 @@ const Search = ({onSearch, initialValue = ''}: SearchProps) => {
         value={inputValue}
         onChange={handleInputChange}
         onKeyDown={handleKeyDown}
-        placeholder="Enter pokemon name"
+        placeholder={t('searchPlaceholder')}
       />
-      <Button onClick={handleSearch}>Search</Button>
+      <Button onClick={handleSearch}>{t('search')}</Button>
     </div>
   );
 }

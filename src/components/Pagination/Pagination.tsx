@@ -1,3 +1,6 @@
+'use client';
+
+import { useTranslations } from 'next-intl';
 import styles from './Pagination.module.css';
 
 interface PaginationProps {
@@ -7,6 +10,9 @@ interface PaginationProps {
 }
 
 const Pagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) => {
+
+  const t = useTranslations('common');
+
   const getVisiblePages = () => {
     const delta = 2;
     const range: number[] = [];
@@ -25,7 +31,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) 
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
       >
-        Previous
+        {t('previous')}
       </button>
 
       {visiblePages[0] > 1 && (
@@ -57,7 +63,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) 
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
       >
-        Next
+        {t('next')}
       </button>
     </div>
   );
