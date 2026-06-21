@@ -4,6 +4,9 @@ import './globals.css';
 export const metadata: Metadata = {
   title: 'Pokemon Search App',
   description: 'Search for your favorite Pokemon',
+  icons: {
+    icon: '/favicon.svg',
+  },
 };
 
 export default function RootLayout({

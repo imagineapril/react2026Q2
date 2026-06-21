@@ -1,13 +1,11 @@
-'use client';
-
 import { Link } from '@/i18n/navigation';
-import { useTranslations } from 'next-intl';
+import { getTranslations } from 'next-intl/server';
 import Card from '../Card/Card';
 import { type ResultsProps } from '../../types';
 import styles from './Results.module.css';
 
-const Results = ({ items = [], currentPage = 1 }: ResultsProps) => {
-  const t = useTranslations('common');
+const Results = async ({ items = [], currentPage = 1 }: ResultsProps) => {
+  const t = await getTranslations('common');
 
   return (
     <div className={styles.container}>

@@ -37,7 +37,11 @@ export default async function HomePage({ searchParams }: PageProps) {
         <div className={styles.leftPanel}>
           <Results items={items} currentPage={validPage} />
           {totalPages > 1 && (
-            <Pagination currentPage={validPage} totalPages={totalPages} />
+            <Pagination 
+              currentPage={validPage} 
+              totalPages={totalPages}
+              searchTerm={searchTerm}  
+            />
           )}
         </div>
         <div className={styles.rightPanel}>

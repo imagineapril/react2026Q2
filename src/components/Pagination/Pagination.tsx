@@ -1,24 +1,22 @@
-'use client';
-
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useTranslations } from 'next-intl';
+import { Link } from '@/i18n/navigation';
+import { getTranslations } from 'next-intl/server';
 import styles from './Pagination.module.css';
 
 interface PaginationProps {
   currentPage: number;
   totalPages: number;
+  searchTerm?: string;
 }
 
-const Pagination = ({ currentPage, totalPages }: PaginationProps) => {
+const Pagination = async({ currentPage, totalPages, searchTerm = ''  }: PaginationProps) => {
 
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const t = useTranslations('common');
+  const t = await getTranslations('common');
 
-  const handlePageChange = (page: number) => {
-    const params = new URLSearchParams(searchParams.toString());
+  const getPageUrl = (page: number) => {
+    const params = new URLSearchParams();
+    if (searchTerm) params.set('search', searchTerm);
     params.set('page', String(page));
-    router.push(`/?${params.toString()}`);
+    return `/?${params.toString()}`;
   };
 
   const getVisiblePages = () => {
@@ -34,45 +32,41 @@ const Pagination = ({ currentPage, totalPages }: PaginationProps) => {
 
   return (
     <div className={styles.pagination}>
-      <button
-        className={styles.button}
-        onClick={() => handlePageChange(currentPage - 1)}
-        disabled={currentPage === 1}
-      >
-        {t('previous')}
-      </button>
+      {currentPage > 1 && (
+        <Link href={getPageUrl(currentPage - 1)} className={styles.button}>
+          {t('previous')}
+        </Link>
+      )}
 
       {visiblePages[0] > 1 && (
         <>
-          <button className={styles.button} onClick={() => handlePageChange(1)}>1</button>
+          <Link href={getPageUrl(1)} className={styles.button}>1</Link>
           {visiblePages[0] > 2 && <span className={styles.ellipsis}>...</span>}
         </>
       )}
 
       {visiblePages.map(page => (
-        <button
+        <Link
           key={page}
+          href={getPageUrl(page)}
           className={`${styles.button} ${currentPage === page ? styles.active : ''}`}
-          onClick={() => handlePageChange(page)}
         >
           {page}
-        </button>
+        </Link>
       ))}
 
       {visiblePages[visiblePages.length - 1] < totalPages && (
         <>
           {visiblePages[visiblePages.length - 1] < totalPages - 1 && <span className={styles.ellipsis}>...</span>}
-          <button className={styles.button} onClick={() => handlePageChange(totalPages)}>{totalPages}</button>
+          <Link href={getPageUrl(totalPages)} className={styles.button}>{totalPages}</Link>
         </>
       )}
 
-      <button
-        className={styles.button}
-        onClick={() => handlePageChange(currentPage + 1)}
-        disabled={currentPage === totalPages}
-      >
-        {t('next')}
-      </button>
+      {currentPage < totalPages && (
+        <Link href={getPageUrl(currentPage + 1)} className={styles.button}>
+          {t('next')}
+        </Link>
+      )}
     </div>
   );
 };

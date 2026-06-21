@@ -1,3 +1,5 @@
+'use client'
+
 import Image from 'next/image';
 import type { CardProps } from '../../types';
 import styles from './Card.module.css';
