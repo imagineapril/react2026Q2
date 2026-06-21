@@ -1,8 +1,10 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
+import { useTransition } from 'react';
 import { usePokemonStore } from '../../store/pokemonStore';
 import { usePokemonList } from '../../hooks/usePokemonQueries';
+import { generateCSV } from '../../../app/actions/csv';
 import styles from './Flyout.module.css';
 
 const Flyout = () => {
@@ -12,6 +14,7 @@ const Flyout = () => {
   const { data } = usePokemonList(1, '', 151);
   const allItems = data?.items ?? [];
   const selectedCount = selectedIds.size;
+  const [isPending, startTransition] = useTransition();
 
   if (selectedCount === 0) return null;
 
@@ -20,28 +23,23 @@ const Flyout = () => {
   };
 
   const handleDownload = () => {
-    const selectedPokemons = allItems.filter((item) => selectedIds.has(item.id));
-    if (selectedPokemons.length === 0) return;
-
-    const headers = ['Name', 'Description', 'Height', 'Weight', 'Types'];
-    const rows = selectedPokemons.map((p) => [
-      p.name,
-      p.description,
-      p.height ?? '',
-      p.weight ?? '',
-      p.types?.join(', ') ?? '',
-    ]);
-    const csvContent = [headers, ...rows].map(row => row.join(',')).join('\n');
-
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement('a');
-    const url = URL.createObjectURL(blob);
-    link.href = url;
-    link.setAttribute('download', `${selectedCount}_items.csv`);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
+    const ids = Array.from(selectedIds);
+    startTransition(async () => {
+      try {
+        const result = await generateCSV(ids);
+        const blob = new Blob([result.csv], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        const url = URL.createObjectURL(blob);
+        link.href = url;
+        link.setAttribute('download', result.filename);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+      } catch (error) {
+        console.error('Failed to generate CSV:', error);
+      }
+    });
   };
 
   return (
