@@ -1,0 +1,35 @@
+.container {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.languageButton {
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.languageButton:hover:not(:disabled) {
+  background: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+}
+
+.languageButton:disabled {
+  opacity: 0.6;
+  cursor: default;
+  font-weight: 700;
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.separator {
+  color: var(--color-text-secondary);
+}
